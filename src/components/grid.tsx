@@ -47,21 +47,13 @@ export const Grid = () => {
       tempgrid[i][j + 1].distance,
       tempgrid[i][j - 1].distance,
       tempgrid[i - 1][j].distance,
-      tempgrid[i - 1][j + 1].distance,
-      tempgrid[i - 1][j - 1].distance,
-      tempgrid[i + 1][j - 1].distance,
-      tempgrid[i + 1][j].distance,
-      tempgrid[i + 1][j + 1].distance))
+      tempgrid[i + 1][j].distance))
     setGridItems(tempgrid)
     await sleep(500)
     void BFS(i, j + 1)
     void BFS(i, j - 1)
     void BFS(i + 1, j)
-    void BFS(i + 1, j + 1)
-    void BFS(i + 1, j - 1)
     void BFS(i - 1, j)
-    void BFS(i - 1, j + 1)
-    void BFS(i - 1, j - 1)
   }
 
   return <>
