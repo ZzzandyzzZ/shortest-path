@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 
 import type { Node } from '../types'
 
-const sleep = async (delay) => await new Promise((resolve) => setTimeout(resolve, delay))
+const sleep = async (delay: number) => await new Promise((resolve) => setTimeout(resolve, delay))
 const rows = 10
 const columns = 15
 const initalNode = {
