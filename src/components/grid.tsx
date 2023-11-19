@@ -6,7 +6,7 @@ const sleep = async (delay: number) => await new Promise((resolve) => setTimeout
 const rows = 10
 const columns = 15
 const startCoords = { i: 6, j: 10 }
-const endCoords = { i: 9, j: 14 }
+const endCoords = { i: 8, j: 13 }
 
 const initalNode = {
   visited: false,
@@ -37,6 +37,14 @@ export const Grid = () => {
     const tempgrid = [...gridItems]
     tempgrid[i][j].blocked = !gridItems[i][j].blocked
     setGridItems(tempgrid)
+  }
+
+  const getCellBgColor = ({ i, j }: Coord) => {
+    if (gridItems[i][j].blocked) return 'bg-black'
+    if (gridItems[i][j].visited) return 'bg-green-300'
+    if (i === startCoords.i && j === startCoords.j) return 'bg-green-600'
+    if (i === endCoords.i && j === endCoords.j) return 'bg-red-600'
+    return 'bg-blue-100'
   }
 
   const BFS = async (startingX: number, startingY: number) => {
