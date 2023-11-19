@@ -3,3 +3,8 @@ export interface Node {
   blocked: boolean
   distance: number
 }
+
+export interface Coord {
+  i: number
+  j: number
+}
