@@ -16,22 +16,24 @@ const initalNode = {
 const initialGridItems: Node[][] = Array(rows).fill(null).map((_, i) => Array(columns).fill(null).map((_, j) => ({ ...initalNode, coord: { i, j } })))
 export const Grid = () => {
   const [gridItems, setGridItems] = useState(initialGridItems)
+
   useEffect(() => {
-    const tempgrid = [...gridItems]
-    tempgrid[startCoords.i][startCoords.j].distance = 0
-    setGridItems(tempgrid)
-    blockRandomCells()
+    const blockedGrid = getRandomBlockedGrid()
+    blockedGrid[startCoords.i][startCoords.j].distance = 0
+    setGridItems(blockedGrid)
   }, [])
-  const blockRandomCells = () => {
+
+  const getRandomBlockedGrid = () => {
     const tempgrid = gridItems.map(row => row.map(cell => ({
       ...cell,
       blocked: (Math.random() < 0.3)
     })))
     tempgrid[startCoords.i][startCoords.j].blocked = false
     tempgrid[endCoords.i][endCoords.j].blocked = false
-    setGridItems(tempgrid)
+    return tempgrid
   }
-  const handleCellClick = (i: number, j: number) => {
+
+  const handleCellClick = ({ i, j }: Coord) => {
     const tempgrid = [...gridItems]
     tempgrid[i][j].blocked = !gridItems[i][j].blocked
     setGridItems(tempgrid)
@@ -67,7 +69,7 @@ export const Grid = () => {
   }
 
   return <>
-  <button onClick={() => { void BFS(startingX, startingY) }}>Iniciar</button>
+  <button onClick={() => { void BFS(startCoords.i, startCoords.j) }}>Iniciar</button>
   <table>
     <tbody >
     {
@@ -77,14 +79,8 @@ export const Grid = () => {
           row.map((_, j) => {
             if (i === 0 || j === 0) return null
             if (i === rows - 1 || j === columns - 1) return null
-            let bgColor = 'bg-blue-100'
-            if (gridItems[i][j].blocked) {
-              bgColor = 'bg-black'
-            }
-            if (gridItems[i][j].visited) {
-              bgColor = 'bg-green-300'
-            }
-            return <td key={`${i}-${j}`} onClick={() => { handleCellClick(i, j) }}
+            const bgColor = getCellBgColor({ i, j })
+            return <td key={`${i}-${j}`} onClick={() => { handleCellClick({ i, j }) }}
             className={`${bgColor}  border-blue-950 aspect-square h-[10px] w-[10px] text-xs`}>{gridItems[i][j].distance}</td>
           })
         }
