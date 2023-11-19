@@ -46,8 +46,15 @@ export const Grid = () => {
     if (i === endCoords.i && j === endCoords.j) return 'bg-red-600'
     return 'bg-blue-100'
   }
+  const updateCell = ({ i, j, curr }: Coord & { curr: Node }) => {
+    const tempgrid = [...gridItems]
+    tempgrid[i][j].visited = true
+    tempgrid[i][j].distance = curr.distance + 1
+    tempgrid[i][j].prevCoord = { i, j }
+    setGridItems(tempgrid)
+  }
 
-  const BFS = async (startingX: number, startingY: number) => {
+  const BFS = async ({ i: startingX, j: startingY }: Coord) => {
     const queue = [gridItems[startingX][startingY]]
     while (queue.length >= 0) {
       await sleep(50)
@@ -58,26 +65,21 @@ export const Grid = () => {
         { i, j },
         { i, j: j + 1 },
         { i, j: j - 1 },
-        { i: i - 1, j }, { i: i + 1, j }
+        { i: i - 1, j },
+        { i: i + 1, j }
       ]
       directions.forEach(({ i: ci, j: cj }) => {
-        if (ci >= rows - 1 || cj >= columns - 1) return
-        if (ci <= 0 || cj <= 0) return
+        if (ci >= rows - 1 || cj >= columns - 1 || ci <= 0 || cj <= 0) return
         const children = gridItems[ci][cj]
-        if (children.visited) return
-        if (children.blocked) return
-        const tempgrid = [...gridItems]
-        tempgrid[ci][cj].visited = true
-        tempgrid[ci][cj].distance = tempgrid[i][j].distance + 1
-        tempgrid[ci][cj].prevCoord = { i, j }
-        setGridItems(tempgrid)
+        if (children.visited || children.blocked) return
+        updateCell({ i: ci, j: cj, curr })
         queue.push(children)
       })
     }
   }
 
   return <>
-  <button onClick={() => { void BFS(startCoords.i, startCoords.j) }}>Iniciar</button>
+  <button onClick={() => { void BFS(startCoords) }}>Iniciar</button>
   <table>
     <tbody >
     {
