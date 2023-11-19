@@ -3,22 +3,22 @@ import { useEffect, useState } from 'react'
 import type { Node, Coord } from '../types'
 
 const sleep = async (delay: number) => await new Promise((resolve) => setTimeout(resolve, delay))
-const rows = 20
-const columns = 40
-const startingX = 1
-const startingY = 1
+const rows = 10
+const columns = 15
+const startCoords = { i: 6, j: 10 }
+const endCoords = { i: 9, j: 14 }
+
 const initalNode = {
   visited: false,
   blocked: false,
   distance: Infinity
 }
-const initialGridItems: Node[][] = Array(rows).fill(null).map(() => Array(columns).fill(null).map(() => ({ ...initalNode })))
+const initialGridItems: Node[][] = Array(rows).fill(null).map((_, i) => Array(columns).fill(null).map((_, j) => ({ ...initalNode, coord: { i, j } })))
 export const Grid = () => {
   const [gridItems, setGridItems] = useState(initialGridItems)
-  const [shortestPath, setShortestPath] = useState<Coord[]>([{ i: startingX, j: startingY }])
   useEffect(() => {
     const tempgrid = [...gridItems]
-    tempgrid[startingX][startingY].distance = 0
+    tempgrid[startCoords.i][startCoords.j].distance = 0
     setGridItems(tempgrid)
     blockRandomCells()
   }, [])
@@ -27,9 +27,8 @@ export const Grid = () => {
       ...cell,
       blocked: (Math.random() < 0.3)
     })))
-    tempgrid[startingX][startingY].blocked = false
-    // tempgrid[startingX][startingY].blocked = false
-
+    tempgrid[startCoords.i][startCoords.j].blocked = false
+    tempgrid[endCoords.i][endCoords.j].blocked = false
     setGridItems(tempgrid)
   }
   const handleCellClick = (i: number, j: number) => {
@@ -38,43 +37,33 @@ export const Grid = () => {
     setGridItems(tempgrid)
   }
 
-  const BFS = async (i: number, j: number) => {
-    if (i >= rows - 1 || j >= columns - 1) return
-    if (i <= 0 || j <= 0) return
-    if (gridItems[i][j].visited) return
-    if (gridItems[i][j].blocked) return
-    const tempgrid = [...gridItems]
-    tempgrid[i][j].visited = true
-    const directions = [
-      { i, j },
-      { i, j: j + 1 },
-      { i, j: j - 1 },
-      { i: i - 1, j }, { i: i + 1, j }
-    ]
-    let shortestCoord = { i, j }
-    let shortestDistance = tempgrid[i][j].distance
-    directions.forEach(({ i: h, j: k }) => {
-      if (tempgrid[i][j].distance > tempgrid[h][k].distance) {
-        shortestCoord = { i: h, j: k }
-        shortestDistance = tempgrid[h][k].distance
-      }
-    })
-    // const shortestDistance = Math.min(
-    //   tempgrid[i][j].distance,
-    //   tempgrid[i][j + 1].distance,
-    //   tempgrid[i][j - 1].distance,
-    //   tempgrid[i - 1][j].distance,
-    //   tempgrid[i + 1][j].distance)
-    console.log('agregando', shortestCoord)
-    setShortestPath([...shortestPath, shortestCoord])
-    tempgrid[i][j].distance = (1 + shortestDistance)
-    setGridItems(tempgrid)
-    await sleep(50)
-    void BFS(i, j + 1)
-    void BFS(i, j - 1)
-    void BFS(i + 1, j)
-    void BFS(i - 1, j)
-    // console.log({ shortestPath })
+  const BFS = async (startingX: number, startingY: number) => {
+    const queue = [gridItems[startingX][startingY]]
+    while (queue.length >= 0) {
+      await sleep(50)
+      const curr = queue.shift()
+      if (curr == null) { console.log('FINISH'); return }
+      const { coord: { i, j } } = curr
+      const directions = [
+        { i, j },
+        { i, j: j + 1 },
+        { i, j: j - 1 },
+        { i: i - 1, j }, { i: i + 1, j }
+      ]
+      directions.forEach(({ i: ci, j: cj }) => {
+        if (ci >= rows - 1 || cj >= columns - 1) return
+        if (ci <= 0 || cj <= 0) return
+        const children = gridItems[ci][cj]
+        if (children.visited) return
+        if (children.blocked) return
+        const tempgrid = [...gridItems]
+        tempgrid[ci][cj].visited = true
+        tempgrid[ci][cj].distance = tempgrid[i][j].distance + 1
+        tempgrid[ci][cj].prevCoord = { i, j }
+        setGridItems(tempgrid)
+        queue.push(children)
+      })
+    }
   }
 
   return <>
