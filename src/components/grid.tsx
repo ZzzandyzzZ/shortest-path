@@ -3,13 +3,14 @@ import { useEffect, useState } from 'react'
 import type { Node, Coord } from '../types'
 
 const sleep = async (delay: number) => await new Promise((resolve) => setTimeout(resolve, delay))
-const rows = 10
-const columns = 15
-const startCoords = { i: 6, j: 10 }
-const endCoords = { i: 8, j: 13 }
+const rows = 50
+const columns = 80
+const startCoords = { i: 1, j: 1 }
+const endCoords = { i: rows - 2, j: columns - 2 }
 
 const initalNode = {
   visited: false,
+  partOfSolution: false,
   blocked: false,
   distance: Infinity
 }
@@ -20,6 +21,7 @@ export const Grid = () => {
   useEffect(() => {
     const blockedGrid = getRandomBlockedGrid()
     blockedGrid[startCoords.i][startCoords.j].distance = 0
+    blockedGrid[startCoords.i][startCoords.j].visited = true
     setGridItems(blockedGrid)
   }, [])
 
@@ -41,28 +43,39 @@ export const Grid = () => {
 
   const getCellBgColor = ({ i, j }: Coord) => {
     if (gridItems[i][j].blocked) return 'bg-black'
-    if (gridItems[i][j].visited) return 'bg-green-300'
     if (i === startCoords.i && j === startCoords.j) return 'bg-green-600'
     if (i === endCoords.i && j === endCoords.j) return 'bg-red-600'
+    if (gridItems[i][j].partOfSolution) return 'bg-blue-600'
+    if (gridItems[i][j].visited) return 'bg-green-300'
     return 'bg-blue-100'
   }
-  const updateCell = ({ i, j, curr }: Coord & { curr: Node }) => {
+  const updateCell = ({ i, j, currNode }: Coord & { currNode: Node }) => {
     const tempgrid = [...gridItems]
     tempgrid[i][j].visited = true
-    tempgrid[i][j].distance = curr.distance + 1
-    tempgrid[i][j].prevCoord = { i, j }
+    tempgrid[i][j].distance = currNode.distance + 1
+    tempgrid[i][j].prevCoord = currNode.coord
     setGridItems(tempgrid)
+  }
+
+  const drawShortestPath = () => {
+    let currNode = gridItems[endCoords.i][endCoords.j]
+    while (currNode.prevCoord != null) {
+      const { coord: { i, j }, prevCoord } = currNode
+      const tempgrid = [...gridItems]
+      tempgrid[i][j].partOfSolution = true
+      setGridItems(tempgrid)
+      currNode = gridItems[prevCoord.i][prevCoord.j]
+    }
   }
 
   const BFS = async ({ i: startingX, j: startingY }: Coord) => {
     const queue = [gridItems[startingX][startingY]]
     while (queue.length >= 0) {
-      await sleep(50)
-      const curr = queue.shift()
-      if (curr == null) { console.log('FINISH'); return }
-      const { coord: { i, j } } = curr
+      await sleep(1)
+      const currNode = queue.shift()
+      if (currNode == null) { console.log('FINISH'); break }
+      const { coord: { i, j } } = currNode
       const directions = [
-        { i, j },
         { i, j: j + 1 },
         { i, j: j - 1 },
         { i: i - 1, j },
@@ -72,10 +85,11 @@ export const Grid = () => {
         if (ci >= rows - 1 || cj >= columns - 1 || ci <= 0 || cj <= 0) return
         const children = gridItems[ci][cj]
         if (children.visited || children.blocked) return
-        updateCell({ i: ci, j: cj, curr })
+        updateCell({ i: ci, j: cj, currNode })
         queue.push(children)
       })
     }
+    drawShortestPath()
   }
 
   return <>
@@ -91,7 +105,9 @@ export const Grid = () => {
             if (i === rows - 1 || j === columns - 1) return null
             const bgColor = getCellBgColor({ i, j })
             return <td key={`${i}-${j}`} onClick={() => { handleCellClick({ i, j }) }}
-            className={`${bgColor}  border-blue-950 aspect-square h-[10px] w-[10px] text-xs`}>{gridItems[i][j].distance}</td>
+            className={`${bgColor}  border-blue-950 aspect-square h-[10px] w-[10px] text-xs`}>
+              {/* {gridItems[i][j].distance} */}
+              </td>
           })
         }
         </tr>
