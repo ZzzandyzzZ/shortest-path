@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 
-import type { Node, Coord } from '../types'
+import { useNavigate, useSearchParams } from 'react-router-dom'
+import type { Coord, Node } from '../types'
 
 const sleep = async (delay: number) => await new Promise((resolve) => setTimeout(resolve, delay))
 const rows = 30
@@ -15,7 +16,7 @@ const initalNode = {
   distance: Infinity
 }
 
-function linearCongruentialGenerator(seed) {
+function linearCongruentialGenerator(seed: string) {
   const a = 1664525
   const c = 1013904223
   const m = Math.pow(2, 32)
@@ -32,12 +33,24 @@ function linearCongruentialGenerator(seed) {
     }
   }
 }
-const seed = 'asdasdasd'
-const intSeed = seed.split('').reduce((total, curr) => total + curr.charCodeAt(0), 0)
 
 const initialGridItems: Node[][] = Array(rows).fill(null).map((_, i) => Array(columns).fill(null).map((_, j) => ({ ...initalNode, coord: { i, j } })))
 export const Grid = () => {
   const [gridItems, setGridItems] = useState(initialGridItems)
+  const [searchParams] = useSearchParams()
+  const navigate = useNavigate()
+  const seed = searchParams.get('seed') ?? Math.random().toString()
+  useEffect(() => {
+    if (searchParams.get('seed') == null) {
+      const params = new URLSearchParams(searchParams)
+      params.set('seed', seed)
+      navigate({
+        pathname: '/',
+        search: params.toString()
+      })
+    }
+  }, [])
+
   const log = linearCongruentialGenerator(seed)
   useEffect(() => {
     const blockedGrid = getRandomBlockedGrid()
@@ -47,10 +60,9 @@ export const Grid = () => {
   }, [])
 
   const getRandomBlockedGrid = () => {
-    const tempgrid = gridItems.map((row, i) => row.map((cell, j) => ({
+    const tempgrid = gridItems.map(row => row.map(cell => ({
       ...cell,
-      blocked: log.next() % 10 < 5
-      // blocked: false
+      blocked: log.next() % 10 < 4
     })))
     tempgrid[startCoords.i][startCoords.j].blocked = false
     tempgrid[endCoords.i][endCoords.j].blocked = false
