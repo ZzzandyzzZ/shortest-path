@@ -3,8 +3,8 @@ import { useEffect, useState } from 'react'
 import type { Node, Coord } from '../types'
 
 const sleep = async (delay: number) => await new Promise((resolve) => setTimeout(resolve, delay))
-const rows = 50
-const columns = 80
+const rows = 30
+const columns = 40
 const startCoords = { i: 1, j: 1 }
 const endCoords = { i: rows - 2, j: columns - 2 }
 
@@ -14,10 +14,31 @@ const initalNode = {
   blocked: false,
   distance: Infinity
 }
+
+function linearCongruentialGenerator(seed) {
+  const a = 1664525
+  const c = 1013904223
+  const m = Math.pow(2, 32)
+
+  let value = 0
+  for (let i = 0; i < seed.length; i++) {
+    value += seed.charCodeAt(i)
+  }
+
+  return {
+    next: function () {
+      value = (a * value + c) % m
+      return value
+    }
+  }
+}
+const seed = 'asdasdasd'
+const intSeed = seed.split('').reduce((total, curr) => total + curr.charCodeAt(0), 0)
+
 const initialGridItems: Node[][] = Array(rows).fill(null).map((_, i) => Array(columns).fill(null).map((_, j) => ({ ...initalNode, coord: { i, j } })))
 export const Grid = () => {
   const [gridItems, setGridItems] = useState(initialGridItems)
-
+  const log = linearCongruentialGenerator(seed)
   useEffect(() => {
     const blockedGrid = getRandomBlockedGrid()
     blockedGrid[startCoords.i][startCoords.j].distance = 0
@@ -26,9 +47,10 @@ export const Grid = () => {
   }, [])
 
   const getRandomBlockedGrid = () => {
-    const tempgrid = gridItems.map(row => row.map(cell => ({
+    const tempgrid = gridItems.map((row, i) => row.map((cell, j) => ({
       ...cell,
-      blocked: (Math.random() < 0.3)
+      blocked: log.next() % 10 < 5
+      // blocked: false
     })))
     tempgrid[startCoords.i][startCoords.j].blocked = false
     tempgrid[endCoords.i][endCoords.j].blocked = false
@@ -71,7 +93,7 @@ export const Grid = () => {
   const BFS = async ({ i: startingX, j: startingY }: Coord) => {
     const queue = [gridItems[startingX][startingY]]
     while (queue.length >= 0) {
-      await sleep(1)
+      // await sleep(1)
       const currNode = queue.shift()
       if (currNode == null) { console.log('FINISH'); break }
       const { coord: { i, j } } = currNode
@@ -93,7 +115,7 @@ export const Grid = () => {
   }
 
   return <>
-  <button onClick={() => { void BFS(startCoords) }}>Iniciar</button>
+  {/* <button onClick={() => { void BFS(startCoords) }}>Iniciar</button> */}
   <table>
     <tbody >
     {
@@ -107,6 +129,7 @@ export const Grid = () => {
             return <td key={`${i}-${j}`} onClick={() => { handleCellClick({ i, j }) }}
             className={`${bgColor}  border-blue-950 aspect-square h-[10px] w-[10px] text-xs`}>
               {/* {gridItems[i][j].distance} */}
+              {/* {i}-{j} */}
               </td>
           })
         }
