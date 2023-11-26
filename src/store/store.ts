@@ -17,10 +17,10 @@ interface Store {
   setGridColumns: (columns: number) => void
   blockNode: ({ i, j }: Coord) => void
   setSeed: (seed: string) => void
+  visitNode: ({ i, j, currNode }: Coord & { currNode: Node }) => void
+  drawShortestPath: () => void
 }
 
-const startCoord = { i: 0, j: 0 }
-const endCoord = { i: 0, j: 0 }
 const gridRows = 6
 const gridColumns = 10
 const initalNode = {
@@ -29,6 +29,8 @@ const initalNode = {
   blocked: false,
   distance: Infinity
 }
+const startCoord = { i: 0, j: 0 }
+const endCoord = { i: gridRows - 1, j: gridColumns - 1 }
 const initialGrid = Array(gridRows).fill(null).map(
   (_, i) => Array(gridColumns).fill(null).map(
     (_, j) => ({ ...initalNode, coord: { i, j } })
@@ -62,10 +64,30 @@ export const useStore = create<Store>((set, get) => ({
   setSeed: (seed: string) => {
     set({ seed })
   },
+  visitNode: ({ i, j, currNode }: Coord & { currNode: Node }) => {
+    const grid = get().grid
+    const tempGrid = [...grid]
+    tempGrid[i][j].visited = true
+    tempGrid[i][j].distance = currNode.distance + 1
+    tempGrid[i][j].prevCoord = currNode.coord
+    set({ grid: tempGrid })
+  },
   blockNode: ({ i, j }: Coord) => {
     const grid = get().grid
     const tempGrid = [...grid]
     tempGrid[i][j].blocked = !grid[i][j].blocked
     set({ grid: tempGrid })
+  },
+  drawShortestPath: () => {
+    const endCoord = get().endCoord
+    const grid = get().grid
+    let currNode = grid[endCoord.i][endCoord.j]
+    while (currNode.prevCoord != null) {
+      const { coord: { i, j }, prevCoord } = currNode
+      const tempGrid = [...grid]
+      tempGrid[i][j].partOfSolution = true
+      set({ grid: tempGrid })
+      currNode = grid[prevCoord.i][prevCoord.j]
+    }
   }
 }))
