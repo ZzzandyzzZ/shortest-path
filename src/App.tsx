@@ -1,6 +1,15 @@
+import { useSearchParams } from 'react-router-dom'
 import { Grid } from './components/grid'
 
 function App() {
+  const [, setParams] = useSearchParams()
+
+  const generateRandomSeed = () => {
+    setParams(prev => {
+      prev.set('seed', Math.random().toString())
+      return prev
+    })
+  }
   return (
     <>
       <h1 className="text-4xl font-bold">Shortest Path algorithms</h1>
@@ -11,7 +20,7 @@ function App() {
       </section>
       <section className='flex flex-col gap-1 bg-yellow-200 col-span-3 p-3'>
       <button className='text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800'>Iniciar</button>
-      <button className='text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800'>Generar aleatorio</button>
+      <button onClick={generateRandomSeed} className='text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800'>Generar aleatorio</button>
       <div className="relative">
         <select className="peer h-full w-full rounded-[7px] border border-blue-gray-200 border-t-transparent bg-transparent px-3 py-2.5 font-sans text-sm font-normal text-blue-gray-700 outline outline-0 transition-all placeholder-shown:border placeholder-shown:border-blue-gray-200 placeholder-shown:border-t-blue-gray-200 empty:!bg-red-500 focus:border-2 focus:border-pink-500 focus:border-t-transparent focus:outline-0 disabled:border-0 disabled:bg-blue-gray-50">
           <option value="brazil">BFS</option>

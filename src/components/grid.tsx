@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 
-import { useNavigate, useSearchParams } from 'react-router-dom'
+import { useSearchParams } from 'react-router-dom'
 import type { Coord, Node } from '../types'
 
 const sleep = async (delay: number) => await new Promise((resolve) => setTimeout(resolve, delay))
@@ -34,30 +34,22 @@ function linearCongruentialGenerator(seed: string) {
   }
 }
 
-const initialGridItems: Node[][] = Array(rows).fill(null).map((_, i) => Array(columns).fill(null).map((_, j) => ({ ...initalNode, coord: { i, j } })))
+const defaultSearchParams = {
+  seed: Math.random().toString()
+}
 export const Grid = () => {
+  const initialGridItems: Node[][] = Array(rows).fill(null).map((_, i) => Array(columns).fill(null).map((_, j) => ({ ...initalNode, coord: { i, j } })))
   const [gridItems, setGridItems] = useState(initialGridItems)
-  const [searchParams] = useSearchParams()
-  const navigate = useNavigate()
-  const seed = searchParams.get('seed') ?? Math.random().toString()
-  useEffect(() => {
-    if (searchParams.get('seed') == null) {
-      const params = new URLSearchParams(searchParams)
-      params.set('seed', seed)
-      navigate({
-        pathname: '/',
-        search: params.toString()
-      })
-    }
-  }, [])
-
-  const log = linearCongruentialGenerator(seed)
+  const [params] = useSearchParams(defaultSearchParams)
+  const seed = params.get('seed') as string
   useEffect(() => {
     const blockedGrid = getRandomBlockedGrid()
     blockedGrid[startCoords.i][startCoords.j].distance = 0
     blockedGrid[startCoords.i][startCoords.j].visited = true
     setGridItems(blockedGrid)
-  }, [])
+  }, [seed])
+
+  const log = linearCongruentialGenerator(seed)
 
   const getRandomBlockedGrid = () => {
     const tempgrid = gridItems.map(row => row.map(cell => ({
@@ -105,7 +97,7 @@ export const Grid = () => {
   const BFS = async ({ i: startingX, j: startingY }: Coord) => {
     const queue = [gridItems[startingX][startingY]]
     while (queue.length >= 0) {
-      // await sleep(1)
+      await sleep(1)
       const currNode = queue.shift()
       if (currNode == null) { console.log('FINISH'); break }
       const { coord: { i, j } } = currNode
@@ -127,7 +119,7 @@ export const Grid = () => {
   }
 
   return <>
-  {/* <button onClick={() => { void BFS(startCoords) }}>Iniciar</button> */}
+  <button onClick={() => { void BFS(startCoords) }}>Iniciar</button>
   <table>
     <tbody >
     {
