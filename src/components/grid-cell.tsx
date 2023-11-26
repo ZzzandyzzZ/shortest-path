@@ -21,7 +21,7 @@ export const GridCell = ({ coord: { i, j } }: Props) => {
   }
 
   return <td key={`${i}-${j}`} onClick={() => { blockNode({ i, j }) }}
-    className={`${getBgColor()}  border-blue-950 aspect-square h-[40px] w-[40px] text-xs`}>
+    className={`${getBgColor()}  border-blue-950 aspect-square h-[10px] w-[10px] text-xs`}>
     {/* {gridItems[i][j].distance} */}
     {/* {i}-{j} */}
   </td>
