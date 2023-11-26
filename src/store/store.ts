@@ -19,10 +19,11 @@ interface Store {
   setSeed: (seed: string) => void
   visitNode: ({ i, j, currNode }: Coord & { currNode: Node }) => void
   drawShortestPath: () => void
+  resetGrid: () => void
 }
 
-const gridRows = 6
-const gridColumns = 10
+const gridRows = 30
+const gridColumns = 40
 const initalNode = {
   visited: false,
   partOfSolution: false,
@@ -44,6 +45,21 @@ export const useStore = create<Store>((set, get) => ({
   startCoord,
   endCoord,
   seed: null,
+  resetGrid: () => {
+    const grid = get().grid
+    const startCoord = get().startCoord
+    const endCoord = get().endCoord
+    const tempGrid = grid.map((row) => {
+      return row.map(({ blocked, coord }) => {
+        return { ...initalNode, blocked, coord }
+      })
+    })
+    tempGrid[startCoord.i][startCoord.j].distance = 0
+    tempGrid[startCoord.i][startCoord.j].visited = true
+    tempGrid[startCoord.i][startCoord.j].blocked = false
+    tempGrid[endCoord.i][endCoord.j].blocked = false
+    set({ grid: tempGrid })
+  },
   generateGrid: (initalSeed) => {
     const seed = initalSeed ?? getRandomString()
     const startCoord = get().startCoord
