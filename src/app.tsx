@@ -1,7 +1,8 @@
-import { useEffect } from 'react'
+import { useEffect, useTransition } from 'react'
 import { useSearchParams } from 'react-router-dom'
 
 import { Grid } from './components'
+import { getRandomString } from './lib'
 import { startBfsAlgorithm, useStore } from './store'
 
 function App() {
@@ -11,6 +12,7 @@ function App() {
   const resetGrid = useStore(state => state.resetGrid)
 
   const [searchParams, setParams] = useSearchParams()
+  const [,startTransition] = useTransition()
   const seed = searchParams.get('seed')
 
   useEffect(() => {
@@ -23,16 +25,19 @@ function App() {
   const handleReset = () => {
     generateGrid()
     setParams(prev => {
-      prev.set('seed', Math.random().toString())
+      prev.set('seed', getRandomString())
       return prev
     })
   }
-  const handleStart = async () => {
-    console.log('inicio', seed)
-    resetGrid()
+  const startAlgorithm = async () => {
     await startBfsAlgorithm()
-    console.log('termine')
     drawShortestPath()
+  }
+  const handleStart = () => {
+    resetGrid()
+    startTransition(() => {
+      void startAlgorithm()
+    })
   }
 
   return (
@@ -40,8 +45,11 @@ function App() {
       <main className='grid grid-cols-12  min-h-screen'>
         <section className='flex flex-col bg-yellow-200 col-span-3 p-3'>
           <h1 className="text-2xl text-center font-bold">Shortest Path algorithms</h1>
-          <button onClick={() => { void handleStart() }} className='text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800'>
+          <button onClick={handleStart} className='text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800'>
             Iniciar
+          </button>
+          <button onClick={resetGrid} className='text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800'>
+            Reiniciar
           </button>
           <button onClick={handleReset} className='text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800'>
             Generar aleatorio
