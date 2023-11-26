@@ -2,12 +2,13 @@ import { useStore } from '.'
 import { sleep } from '../lib'
 
 export const startBfsAlgorithm = async () => {
-  const { startCoord, gridColumns, gridRows, grid, visitNode } = useStore.getState()
+  const { startCoord, gridColumns, gridRows, grid, visitNode, setCurrNode } = useStore.getState()
   const queue = [grid[startCoord.i][startCoord.j]]
   while (queue.length >= 0) {
     await sleep(1)
     const currNode = queue.shift()
     if (currNode == null) { console.log('FINISH'); break }
+    setCurrNode(currNode)
     const { coord: { i, j } } = currNode
     const directions = [
       { i, j: j + 1 },
