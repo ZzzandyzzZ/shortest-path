@@ -8,6 +8,10 @@ interface Store {
   grid: Node[][]
   startCoord: Coord
   endCoord: Coord
+  resetGrid: () => void
+  setGridRows: (rows: number) => void
+  setGridColumns: (columns: number) => void
+  blockNode: ({ i, j }: Coord) => void
 }
 
 const startCoord = { i: 0, j: 0 }
