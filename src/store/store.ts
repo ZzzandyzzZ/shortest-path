@@ -1,9 +1,9 @@
 import { create } from 'zustand'
 
-import { getRandomString } from './lib'
+import { getRandomString } from '../lib'
 
-import { type Coord, type Node } from './types'
-import { generateRandomGrid } from './utils/generate-random-grid'
+import { type Coord, type Node } from '../types'
+import { generateRandomGrid } from '../utils/generate-random-grid'
 
 interface Store {
   gridRows: number
