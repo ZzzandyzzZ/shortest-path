@@ -3,7 +3,7 @@ import {
   createBrowserRouter,
   RouterProvider
 } from 'react-router-dom'
-import App from './App.tsx'
+import App from './app.tsx'
 import './index.css'
 
 const router = createBrowserRouter([
