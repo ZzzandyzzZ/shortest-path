@@ -8,7 +8,17 @@ function App() {
   const generateGrid = useStore(state => state.generateGrid)
   const setSeed = useStore(state => state.setSeed)
   const drawShortestPath = useStore(state => state.drawShortestPath)
+  const resetGrid = useStore(state => state.resetGrid)
+
   const [searchParams, setParams] = useSearchParams()
+  const seed = searchParams.get('seed')
+
+  useEffect(() => {
+    if (seed != null) {
+      setSeed(seed)
+      generateGrid(seed)
+    }
+  }, [])
 
   const handleReset = () => {
     generateGrid()
@@ -18,18 +28,12 @@ function App() {
     })
   }
   const handleStart = async () => {
-    console.log('inicio')
+    console.log('inicio', seed)
+    resetGrid()
     await startBfsAlgorithm()
     console.log('termine')
     drawShortestPath()
   }
-  useEffect(() => {
-    const seed = searchParams.get('seed')
-    if (seed != null) {
-      setSeed(seed)
-      generateGrid(seed)
-    }
-  }, [])
 
   return (
     <>
