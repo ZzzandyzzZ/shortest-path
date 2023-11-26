@@ -1,7 +1,12 @@
 import { create } from 'zustand'
 
-import { type Node } from '../types'
+import { type Node } from './types'
 
+interface Store {
+  gridRows: number
+  gridColumns: number
+  grid: Node[][]
+}
 const initialGridRows = 20
 const initialGridColumns = 40
 const initalNode = {
@@ -10,13 +15,13 @@ const initalNode = {
   blocked: false,
   distance: Infinity
 }
-const initialGrid: Node[][] = Array(initialGridRows).fill(null).map(
+const initialGrid = Array(initialGridRows).fill(null).map(
   (_, i) => Array(initialGridColumns).fill(null).map(
     (_, j) => ({ ...initalNode, coord: { i, j } })
   )
 )
 
-export const useStore = create((set) => ({
+export const useStore = create<Store>((set) => ({
   grid: initialGrid,
   gridRows: initialGridRows,
   gridColumns: initialGridColumns,
