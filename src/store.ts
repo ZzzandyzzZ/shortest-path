@@ -11,14 +11,14 @@ interface Store {
   grid: Node[][]
   startCoord: Coord
   endCoord: Coord
-  seed: string
-  resetGrid: () => void
+  seed: string | null
+  generateGrid: (seed?: string) => void
   setGridRows: (rows: number) => void
   setGridColumns: (columns: number) => void
   blockNode: ({ i, j }: Coord) => void
+  setSeed: (seed: string) => void
 }
 
-const seed = getRandomString()
 const startCoord = { i: 0, j: 0 }
 const endCoord = { i: 0, j: 0 }
 const gridRows = 6
@@ -41,23 +41,26 @@ export const useStore = create<Store>((set, get) => ({
   gridColumns,
   startCoord,
   endCoord,
-  seed,
-  resetGrid: () => {
+  seed: null,
+  generateGrid: (initalSeed) => {
+    const seed = initalSeed ?? getRandomString()
     const startCoord = get().startCoord
     const endCoord = get().endCoord
-    const seed = get().seed
     const tempGrid = generateRandomGrid({ initialGrid, seed })
     tempGrid[startCoord.i][startCoord.j].distance = 0
     tempGrid[startCoord.i][startCoord.j].visited = true
     tempGrid[startCoord.i][startCoord.j].blocked = false
     tempGrid[endCoord.i][endCoord.j].blocked = false
-    set({ grid: tempGrid })
+    set({ grid: tempGrid, seed })
   },
   setGridRows: (rows: number) => {
     set({ gridRows: rows })
   },
   setGridColumns: (columns: number) => {
     set({ gridColumns: columns })
+  },
+  setSeed: (seed: string) => {
+    set({ seed })
   },
   blockNode: ({ i, j }: Coord) => {
     const grid = get().grid
