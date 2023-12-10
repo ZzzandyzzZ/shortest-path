@@ -1,4 +1,5 @@
 import { create } from 'zustand'
+import { devtools } from 'zustand/middleware'
 
 import { getRandomString } from '../lib'
 
@@ -13,6 +14,7 @@ interface Store {
   startCoord: Coord
   endCoord: Coord
   seed: string | null
+  isMousePressed: boolean
   setCurrNode: (node: Node) => void
   generateGrid: (seed?: string) => void
   setGridRows: (rows: number) => void
@@ -22,6 +24,7 @@ interface Store {
   visitNode: ({ i, j, currNode }: Coord & { currNode: Node }) => void
   drawShortestPath: () => void
   resetGrid: () => void
+  setIsMousePressed: (isMousePressed: boolean) => void
 }
 
 const gridRows = 40
@@ -40,7 +43,7 @@ const initialGrid = Array(gridRows).fill(null).map(
   )
 )
 
-export const useStore = create<Store>((set, get) => ({
+export const useStore = create<Store>()(devtools((set, get) => ({
   grid: initialGrid,
   gridRows,
   gridColumns,
@@ -48,6 +51,7 @@ export const useStore = create<Store>((set, get) => ({
   endCoord,
   currNode: null,
   seed: null,
+  isMousePressed: false,
   setCurrNode: (node: Node) => {
     set({ currNode: node })
   },
@@ -111,5 +115,8 @@ export const useStore = create<Store>((set, get) => ({
       set({ grid: tempGrid })
       currNode = grid[prevCoord.i][prevCoord.j]
     }
+  },
+  setIsMousePressed: (isMousePressed: boolean) => {
+    set({ isMousePressed })
   }
-}))
+})))
