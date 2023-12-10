@@ -2,12 +2,14 @@ import { useStore } from '.'
 import { sleep } from '../lib'
 
 export const startBfsAlgorithm = async () => {
-  const { startCoord, gridColumns, gridRows, grid, visitNode, setCurrNode } = useStore.getState()
+  const { startCoord, gridColumns, gridRows, grid, visitNode, setCurrNode, setIsRunning } = useStore.getState()
+  setIsRunning(true)
   const queue = [grid[startCoord.i][startCoord.j]]
   while (queue.length >= 0) {
-    await sleep(1)
+    const { isRunning } = useStore.getState()
+    await sleep(10)
     const currNode = queue.shift()
-    if (currNode == null) { console.log('FINISH'); break }
+    if (currNode == null || !isRunning) { console.log('FINISH'); break }
     setCurrNode(currNode)
     const { coord: { i, j } } = currNode
     const directions = [
@@ -17,6 +19,7 @@ export const startBfsAlgorithm = async () => {
       { i: i + 1, j }
     ]
     directions.forEach(({ i: ci, j: cj }) => {
+      const { grid } = useStore.getState()
       if (ci >= gridRows || cj >= gridColumns || ci < 0 || cj < 0) return
       const children = grid[ci][cj]
       if (children.visited || children.blocked) return
@@ -24,4 +27,5 @@ export const startBfsAlgorithm = async () => {
       queue.push(children)
     })
   }
+  setIsRunning(false)
 }

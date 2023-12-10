@@ -1,6 +1,5 @@
 import { create } from 'zustand'
-import { devtools } from 'zustand/middleware'
-
+import { immer } from 'zustand/middleware/immer'
 import { getRandomString } from '../lib'
 
 import { type Coord, type Node } from '../types'
@@ -15,6 +14,7 @@ interface Store {
   endCoord: Coord
   seed: string | null
   isMousePressed: boolean
+  isRunning: boolean
   setCurrNode: (node: Node) => void
   generateGrid: (seed?: string) => void
   setGridRows: (rows: number) => void
@@ -25,10 +25,13 @@ interface Store {
   drawShortestPath: () => void
   resetGrid: () => void
   setIsMousePressed: (isMousePressed: boolean) => void
+  setIsRunning: (isRunning: boolean) => void
 }
 
-const gridRows = 40
-const gridColumns = 50
+// const gridRows = 65
+// const gridColumns = 100
+const gridRows = 4
+const gridColumns = 5
 const initalNode = {
   visited: false,
   partOfSolution: false,
@@ -43,7 +46,7 @@ const initialGrid = Array(gridRows).fill(null).map(
   )
 )
 
-export const useStore = create<Store>()(devtools((set, get) => ({
+export const useStore = create(immer<Store>((set, get) => ({
   grid: initialGrid,
   gridRows,
   gridColumns,
@@ -52,6 +55,7 @@ export const useStore = create<Store>()(devtools((set, get) => ({
   currNode: null,
   seed: null,
   isMousePressed: false,
+  isRunning: false,
   setCurrNode: (node: Node) => {
     set({ currNode: node })
   },
@@ -68,18 +72,21 @@ export const useStore = create<Store>()(devtools((set, get) => ({
     tempGrid[startCoord.i][startCoord.j].visited = true
     tempGrid[startCoord.i][startCoord.j].blocked = false
     tempGrid[endCoord.i][endCoord.j].blocked = false
-    set({ grid: tempGrid, currNode: null })
+    set({ grid: tempGrid, currNode: null, isRunning: false })
   },
   generateGrid: (initalSeed) => {
     const seed = initalSeed ?? getRandomString()
     const startCoord = get().startCoord
     const endCoord = get().endCoord
-    const tempGrid = generateRandomGrid({ initialGrid, seed })
-    tempGrid[startCoord.i][startCoord.j].distance = 0
-    tempGrid[startCoord.i][startCoord.j].visited = true
-    tempGrid[startCoord.i][startCoord.j].blocked = false
-    tempGrid[endCoord.i][endCoord.j].blocked = false
-    set({ grid: tempGrid, seed, currNode: null })
+    set(state => {
+      state.grid = generateRandomGrid({ initialGrid, seed })
+      state.grid[startCoord.i][startCoord.j].distance = 0
+      state.grid[startCoord.i][startCoord.j].visited = true
+      state.grid[startCoord.i][startCoord.j].blocked = false
+      state.grid[endCoord.i][endCoord.j].blocked = false
+      state.seed = seed
+      state.currNode = null
+    })
   },
   setGridRows: (rows: number) => {
     set({ gridRows: rows })
@@ -91,18 +98,16 @@ export const useStore = create<Store>()(devtools((set, get) => ({
     set({ seed })
   },
   visitNode: ({ i, j, currNode }: Coord & { currNode: Node }) => {
-    const grid = get().grid
-    const tempGrid = [...grid]
-    tempGrid[i][j].visited = true
-    tempGrid[i][j].distance = currNode.distance + 1
-    tempGrid[i][j].prevCoord = currNode.coord
-    set({ grid: tempGrid })
+    set(state => {
+      state.grid[i][j].visited = true
+      state.grid[i][j].distance = currNode.distance + 1
+      state.grid[i][j].prevCoord = currNode.coord
+    })
   },
   blockNode: ({ i, j }: Coord) => {
-    const grid = get().grid
-    const tempGrid = [...grid]
-    tempGrid[i][j].blocked = !grid[i][j].blocked
-    set({ grid: tempGrid })
+    set(state => {
+      state.grid[i][j].blocked = !state.grid[i][j].blocked
+    })
   },
   drawShortestPath: () => {
     const endCoord = get().endCoord
@@ -118,5 +123,8 @@ export const useStore = create<Store>()(devtools((set, get) => ({
   },
   setIsMousePressed: (isMousePressed: boolean) => {
     set({ isMousePressed })
+  },
+  setIsRunning: (isRunning: boolean) => {
+    set({ isRunning })
   }
 })))
