@@ -10,8 +10,8 @@ export const GridCell = ({ coord: { i, j } }: Props) => {
   const startCoord = useStore(state => state.startCoord)
   const endCoord = useStore(state => state.endCoord)
   const currNode = useStore(state => state.currNode)
+  const isMousePressed = useStore(state => state.isMousePressed)
   const blockNode = useStore(state => state.blockNode)
-
   const getBgColor = () => {
     if (grid[i][j].blocked) return 'bg-black'
     if (i === startCoord.i && j === startCoord.j) return 'bg-green-600'
@@ -22,7 +22,11 @@ export const GridCell = ({ coord: { i, j } }: Props) => {
     return 'bg-blue-100'
   }
 
-  return <td key={`${i}-${j}`} onClick={() => { blockNode({ i, j }) }}
+  const handleMouseEnter = () => {
+    if (isMousePressed) { blockNode({ i, j }) }
+  }
+
+  return <td key={`${i}-${j}`} onClick={() => { blockNode({ i, j }) }} onMouseEnter={handleMouseEnter}
     className={`${getBgColor()}  border-blue-950 aspect-square h-[10px] w-[10px] text-xs`}>
     {/* {gridItems[i][j].distance} */}
     {/* {i}-{j} */}
