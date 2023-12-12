@@ -30,7 +30,7 @@ export const GridCell = memo(({ i, j, isCurrNode, isMousePressed, node: { partOf
   }
 
   return <td key={`${i}-${j}`} onClick={() => { blockNode({ i, j }) }} onMouseEnter={handleMouseEnter}
-    className={`${getBgColor()}  border-blue-950 aspect-square h-[10px] w-[10px] text-xs`}>
+    className={`${getBgColor()}  border-blue-950 aspect-square h-[15px] min-w-[15px] text-xs`}>
     {/* {gridItems[i][j].distance} */}
     {/* {i}-{j} */}
   </td>

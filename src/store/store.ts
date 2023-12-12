@@ -28,10 +28,10 @@ interface Store {
   setIsRunning: (isRunning: boolean) => void
 }
 
-// const gridRows = 65
-// const gridColumns = 100
-const gridRows = 4
-const gridColumns = 5
+const gridRows = 20
+const gridColumns = 15
+// const gridColumns = 66  // Max
+// const gridRows = 42
 const initalNode = {
   visited: false,
   partOfSolution: false,

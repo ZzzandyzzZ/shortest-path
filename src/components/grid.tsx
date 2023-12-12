@@ -8,17 +8,19 @@ export const Grid = () => {
   const setIsMousePressed = useStore((state) => state.setIsMousePressed)
 
   return (
-    <table
-      onMouseLeave={() => { setIsMousePressed(false) }}
-      onMouseDown={() => { setIsMousePressed(true) }}
-      onMouseUp={() => { setIsMousePressed(false) }}>
-      <tbody >
-        {grid.map((row, i) =>
-          <tr key={i}>
-            {row.map((_, j) => <GridCell key={i + j} i={i} j={j} node={grid[i][j]} isMousePressed={isMousePressed} isCurrNode={currNode?.coord.i === i && currNode?.coord.j === j}/>)}
-          </tr>
-        )}
-      </tbody>
-    </table>
+    <div className='overflow-auto'>
+      <table
+        onMouseLeave={() => { setIsMousePressed(false) }}
+        onMouseDown={() => { setIsMousePressed(true) }}
+        onMouseUp={() => { setIsMousePressed(false) }}>
+        <tbody >
+          {grid.map((row, i) =>
+            <tr key={i}>
+              {row.map((_, j) => <GridCell key={i + j} i={i} j={j} node={grid[i][j]} isMousePressed={isMousePressed} isCurrNode={currNode?.coord.i === i && currNode?.coord.j === j}/>)}
+            </tr>
+          )}
+        </tbody>
+      </table>
+    </div>
   )
 }
