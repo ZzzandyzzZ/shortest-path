@@ -110,16 +110,15 @@ export const useStore = create(immer<Store>((set, get) => ({
     })
   },
   drawShortestPath: () => {
-    const endCoord = get().endCoord
-    const grid = get().grid
-    let currNode = grid[endCoord.i][endCoord.j]
-    while (currNode.prevCoord != null) {
-      const { coord: { i, j }, prevCoord } = currNode
-      const tempGrid = [...grid]
-      tempGrid[i][j].partOfSolution = true
-      set({ grid: tempGrid })
-      currNode = grid[prevCoord.i][prevCoord.j]
-    }
+    set(state => {
+      const grid = get().grid
+      let currNode = grid[state.endCoord.i][state.endCoord.j]
+      while (currNode.prevCoord != null) {
+        const { coord: { i, j }, prevCoord } = currNode
+        state.grid[i][j].partOfSolution = true
+        currNode = grid[prevCoord.i][prevCoord.j]
+      }
+    })
   },
   setIsMousePressed: (isMousePressed: boolean) => {
     set({ isMousePressed })
