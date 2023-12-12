@@ -21,7 +21,7 @@ export const GridCell = memo(({ i, j, isCurrNode, isMousePressed, node: { partOf
     if (i === endCoord.i && j === endCoord.j) return 'bg-red-600'
     if (isCurrNode) return 'bg-orange-400'
     if (partOfSolution) return 'bg-blue-600'
-    if (visited) return 'bg-green-300'
+    if (visited) return 'bg-[#a8e1f4]'
     return 'bg-blue-100'
   }
 

@@ -43,29 +43,33 @@ function App() {
   return (
     <>
       <main className='grid grid-cols-12  min-h-screen'>
-        <section className='flex flex-col bg-yellow-200 col-span-3 p-3'>
-          <h1 className="text-2xl text-center font-bold">Shortest Path algorithms</h1>
-          <button onClick={handleStart} className='text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800'>
+        <section className='flex flex-col bg-[#DCEEC6] col-span-3 p-3 gap-3'>
+          <h1 className="text-2xl text-center font-bold py-5">Shortest Path algorithms</h1>
+          <button onClick={handleStart} className='text-white bg-[#188AB0] hover:bg-[#17647e] focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800'>
             Iniciar
           </button>
-          <button onClick={resetGrid} className='text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800'>
+          <button onClick={resetGrid} className='text-white bg-[#188AB0] hover:bg-[#17647e] focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800'>
             Reiniciar
           </button>
-          <button onClick={handleReset} className='text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800'>
+          <button onClick={handleReset} className='text-white bg-[#188AB0] hover:bg-[#17647e] focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800'>
             Generar aleatorio
           </button>
-          <div className="relative">
-            <select className="peer h-full w-full rounded-[7px] border border-blue-gray-200 border-t-transparent bg-transparent px-3 py-2.5 font-sans text-sm font-normal text-blue-gray-700 outline outline-0 transition-all placeholder-shown:border placeholder-shown:border-blue-gray-200 placeholder-shown:border-t-blue-gray-200 empty:!bg-red-500 focus:border-2 focus:border-pink-500 focus:border-t-transparent focus:outline-0 disabled:border-0 disabled:bg-blue-gray-50">
+          <div className=''>
+            <label htmlFor="steps-range" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Número de columnas</label>
+            <input id="steps-range" type="range" min="4" max="60" step="2" className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer" />
+          </div>
+          <div className="">
+            <label htmlFor='algorithm' className="">
+              Selecciona Algoritmo
+            </label>
+            <select id="algorithm" className="">
               <option value="brazil">BFS</option>
               <option value="bucharest">A *</option>
               <option value="washington">Disjktra</option>
             </select>
-            <label className="before:content[' '] after:content[' '] pointer-events-none absolute left-0 -top-1.5 flex h-full w-full select-none text-[11px] font-normal leading-tight text-blue-gray-400 transition-all before:pointer-events-none before:mt-[6.5px] before:mr-1 before:box-border before:block before:h-1.5 before:w-2.5 before:rounded-tl-md before:border-t before:border-l before:border-blue-gray-200 before:transition-all after:pointer-events-none after:mt-[6.5px] after:ml-1 after:box-border after:block after:h-1.5 after:w-2.5 after:flex-grow after:rounded-tr-md after:border-t after:border-r after:border-blue-gray-200 after:transition-all peer-placeholder-shown:text-sm peer-placeholder-shown:leading-[3.75] peer-placeholder-shown:text-blue-gray-500 peer-placeholder-shown:before:border-transparent peer-placeholder-shown:after:border-transparent peer-focus:text-[11px] peer-focus:leading-tight peer-focus:text-pink-500 peer-focus:before:border-t-2 peer-focus:before:border-l-2 peer-focus:before:border-pink-500 peer-focus:after:border-t-2 peer-focus:after:border-r-2 peer-focus:after:border-pink-500 peer-disabled:text-transparent peer-disabled:before:border-transparent peer-disabled:after:border-transparent peer-disabled:peer-placeholder-shown:text-blue-gray-500">
-          Selecciona Algoritmo
-            </label>
           </div>
         </section>
-        <section className='col-span-9 bg-zinc-200'>
+        <section className='col-span-9 bg-white flex items-center justify-center'>
           <Grid />
         </section>
       </main>
