@@ -40,14 +40,9 @@ const initalNode = {
 }
 const startCoord = { i: 0, j: 0 }
 const endCoord = { i: gridRows - 1, j: gridColumns - 1 }
-const initialGrid = Array(gridRows).fill(null).map(
-  (_, i) => Array(gridColumns).fill(null).map(
-    (_, j) => ({ ...initalNode, coord: { i, j } })
-  )
-)
 
 export const useStore = create(immer<Store>((set, get) => ({
-  grid: initialGrid,
+  grid: [],
   gridRows,
   gridColumns,
   startCoord,
@@ -76,14 +71,18 @@ export const useStore = create(immer<Store>((set, get) => ({
   },
   generateGrid: (initalSeed) => {
     const seed = initalSeed ?? getRandomString()
-    const startCoord = get().startCoord
-    const endCoord = get().endCoord
     set(state => {
+      state.endCoord = { i: state.gridRows - 1, j: state.gridColumns - 1 }
+      const initialGrid = Array(state.gridRows).fill(null).map(
+        (_, i) => Array(state.gridColumns).fill(null).map(
+          (_, j) => ({ ...initalNode, coord: { i, j } })
+        )
+      )
       state.grid = generateRandomGrid({ initialGrid, seed })
       state.grid[startCoord.i][startCoord.j].distance = 0
       state.grid[startCoord.i][startCoord.j].visited = true
       state.grid[startCoord.i][startCoord.j].blocked = false
-      state.grid[endCoord.i][endCoord.j].blocked = false
+      state.grid[state.endCoord.i][state.endCoord.j].blocked = false
       state.seed = seed
       state.currNode = null
     })
