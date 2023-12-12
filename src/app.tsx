@@ -55,6 +55,10 @@ function App() {
             Generar aleatorio
           </button>
           <div className=''>
+            <label htmlFor="steps-range" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Número de filas</label>
+            <input id="steps-range" type="range" min="4" max="60" step="2" className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer" />
+          </div>
+          <div className=''>
             <label htmlFor="steps-range" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Número de columnas</label>
             <input id="steps-range" type="range" min="4" max="60" step="2" className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer" />
           </div>
