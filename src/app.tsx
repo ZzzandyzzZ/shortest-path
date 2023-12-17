@@ -1,16 +1,13 @@
 import { useEffect, useState, useTransition } from 'react'
 import { useSearchParams } from 'react-router-dom'
 
-import { Grid } from './components'
-import { InputRange } from './components/ui/input-range'
-import { MAX_NUMBER_COL, MAX_NUMBER_ROW } from './constants'
+import { Grid, InputRange } from './components'
+import { DEFAULT_GRID_COLS, DEFAULT_GRID_ROWS, MAX_NUMBER_COL, MAX_NUMBER_ROW } from './constants'
 import { getRandomString } from './lib'
 import { startBfsAlgorithm, useStore } from './store'
-import { getRandomBlockedGrid, getSubGrid } from './utils'
+import { getRandomBlockedGrid, getSubGrid, validateAndGetInt } from './utils'
 
 function App() {
-  const gridRows = useStore(state => state.gridRows)
-  const gridCols = useStore(state => state.gridColumns)
   const setGridRows = useStore(state => state.setGridRows)
   const setGridColumns = useStore(state => state.setGridColumns)
   const setGrid = useStore(state => state.setGrid)
@@ -20,9 +17,18 @@ function App() {
   const [searchParams, setParams] = useSearchParams()
   const [,startTransition] = useTransition()
   const seed = searchParams.get('seed')
-
+  const gridRows = validateAndGetInt(searchParams.get('grid_rows'), DEFAULT_GRID_ROWS)
+  const gridCols = validateAndGetInt(searchParams.get('grid_cols'), DEFAULT_GRID_COLS)
   const [baseGrid] = useState(getRandomBlockedGrid({ seed }))
   const [subGrid] = useState(getSubGrid({ baseGrid, gridCols, gridRows }))
+
+  useEffect(() => {
+    setParams(prev => {
+      prev.set('grid_rows', gridRows.toString())
+      prev.set('grid_cols', gridCols.toString())
+      return prev
+    })
+  }, [])
 
   useEffect(() => {
     setGrid(subGrid)
