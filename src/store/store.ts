@@ -1,11 +1,12 @@
 import { create } from 'zustand'
 import { immer } from 'zustand/middleware/immer'
+
 import { getRandomString } from '../lib'
+import { blockRandomCells, generateCleanGrid } from '../utils'
 
 import { type Coord, type Node } from '../types'
-import { generateRandomGrid } from '../utils/generate-random-grid'
 
-interface Store {
+interface StoreAttributes {
   gridRows: number
   gridColumns: number
   grid: Node[][]
@@ -15,6 +16,9 @@ interface Store {
   seed: string | null
   isMousePressed: boolean
   isRunning: boolean
+}
+
+interface StoreMethods {
   setCurrNode: (node: Node) => void
   generateGrid: (seed?: string) => void
   setGridRows: (rows: number) => void
@@ -28,25 +32,21 @@ interface Store {
   setIsRunning: (isRunning: boolean) => void
 }
 
-const gridRows = 20
-const gridColumns = 15
+type Store = StoreAttributes & StoreMethods
+
+const defaultGridRows = 20
+const defaultGridColumns = 15
 // const gridColumns = 66  // Max
 // const gridRows = 42
-const initalNode = {
-  visited: false,
-  partOfSolution: false,
-  blocked: false,
-  distance: Infinity
-}
-const startCoord = { i: 0, j: 0 }
-const endCoord = { i: gridRows - 1, j: gridColumns - 1 }
+const defaultStartCoord = { i: 0, j: 0 }
+const defaultEndCoord = { i: defaultGridRows - 1, j: defaultGridColumns - 1 }
 
 export const useStore = create(immer<Store>((set, get) => ({
-  grid: [],
-  gridRows,
-  gridColumns,
-  startCoord,
-  endCoord,
+  grid: generateCleanGrid(defaultGridRows, defaultGridColumns),
+  gridRows: defaultGridRows,
+  gridColumns: defaultGridColumns,
+  startCoord: defaultStartCoord,
+  endCoord: defaultEndCoord,
   currNode: null,
   seed: null,
   isMousePressed: false,
@@ -55,34 +55,37 @@ export const useStore = create(immer<Store>((set, get) => ({
     set({ currNode: node })
   },
   resetGrid: () => {
-    const grid = get().grid
-    const startCoord = get().startCoord
-    const endCoord = get().endCoord
-    const tempGrid = grid.map((row) => {
-      return row.map(({ blocked, coord }) => {
-        return { ...initalNode, blocked, coord }
+    set(state => {
+      const { gridRows, gridColumns, startCoord, endCoord, grid } = state
+      const cleanGrid = generateCleanGrid(gridRows, gridColumns)
+      grid.forEach((row, i) => {
+        row.forEach(({ blocked }, j) => {
+          if (blocked) {
+            cleanGrid[i][j].blocked = true
+          }
+        })
       })
+      cleanGrid[startCoord.i][startCoord.j].distance = 0
+      cleanGrid[startCoord.i][startCoord.j].visited = true
+      cleanGrid[startCoord.i][startCoord.j].blocked = false
+      cleanGrid[endCoord.i][endCoord.j].blocked = false
+      state.grid = cleanGrid
+      state.currNode = null
+      state.isRunning = false
     })
-    tempGrid[startCoord.i][startCoord.j].distance = 0
-    tempGrid[startCoord.i][startCoord.j].visited = true
-    tempGrid[startCoord.i][startCoord.j].blocked = false
-    tempGrid[endCoord.i][endCoord.j].blocked = false
-    set({ grid: tempGrid, currNode: null, isRunning: false })
   },
   generateGrid: (initalSeed) => {
     const seed = initalSeed ?? getRandomString()
     set(state => {
-      state.endCoord = { i: state.gridRows - 1, j: state.gridColumns - 1 }
-      const initialGrid = Array(state.gridRows).fill(null).map(
-        (_, i) => Array(state.gridColumns).fill(null).map(
-          (_, j) => ({ ...initalNode, coord: { i, j } })
-        )
-      )
-      state.grid = generateRandomGrid({ initialGrid, seed })
-      state.grid[startCoord.i][startCoord.j].distance = 0
-      state.grid[startCoord.i][startCoord.j].visited = true
-      state.grid[startCoord.i][startCoord.j].blocked = false
-      state.grid[state.endCoord.i][state.endCoord.j].blocked = false
+      const { gridRows, gridColumns, startCoord, endCoord } = state
+      const cleanGrid = generateCleanGrid(gridRows, gridColumns)
+      const randomGrid = blockRandomCells({ grid: cleanGrid, seed })
+      randomGrid[startCoord.i][startCoord.j].distance = 0
+      randomGrid[startCoord.i][startCoord.j].visited = true
+      randomGrid[startCoord.i][startCoord.j].blocked = false
+      randomGrid[endCoord.i][endCoord.j].blocked = false
+      state.endCoord = { i: gridRows - 1, j: gridColumns - 1 }
+      state.grid = randomGrid
       state.seed = seed
       state.currNode = null
     })
