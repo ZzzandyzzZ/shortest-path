@@ -2,7 +2,7 @@ import { create } from 'zustand'
 import { immer } from 'zustand/middleware/immer'
 
 import { getRandomString } from '../lib'
-import { blockRandomCells, generateCleanGrid } from '../utils'
+import { getCleanGrid, getRandomBlockedGrid } from '../utils'
 
 import { type Coord, type Node } from '../types'
 
@@ -42,7 +42,7 @@ const defaultStartCoord = { i: 0, j: 0 }
 const defaultEndCoord = { i: defaultGridRows - 1, j: defaultGridColumns - 1 }
 
 export const useStore = create(immer<Store>((set, get) => ({
-  grid: generateCleanGrid(defaultGridRows, defaultGridColumns),
+  grid: getCleanGrid(defaultGridRows, defaultGridColumns),
   gridRows: defaultGridRows,
   gridColumns: defaultGridColumns,
   startCoord: defaultStartCoord,
@@ -57,7 +57,7 @@ export const useStore = create(immer<Store>((set, get) => ({
   resetGrid: () => {
     set(state => {
       const { gridRows, gridColumns, startCoord, endCoord, grid } = state
-      const cleanGrid = generateCleanGrid(gridRows, gridColumns)
+      const cleanGrid = getCleanGrid(gridRows, gridColumns)
       grid.forEach((row, i) => {
         row.forEach(({ blocked }, j) => {
           if (blocked) {
@@ -78,8 +78,8 @@ export const useStore = create(immer<Store>((set, get) => ({
     const seed = initalSeed ?? getRandomString()
     set(state => {
       const { gridRows, gridColumns, startCoord } = state
-      const cleanGrid = generateCleanGrid(gridRows, gridColumns)
-      const randomGrid = blockRandomCells({ grid: cleanGrid, seed })
+      const cleanGrid = getCleanGrid(gridRows, gridColumns)
+      const randomGrid = getRandomBlockedGrid({ grid: cleanGrid, seed })
       const newEndCord = { i: gridRows - 1, j: gridColumns - 1 }
       randomGrid[startCoord.i][startCoord.j].distance = 0
       randomGrid[startCoord.i][startCoord.j].visited = true

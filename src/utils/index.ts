@@ -1,2 +1,2 @@
-export * from './block-random-cells'
-export * from './generate-clean-grid'
+export * from './get-clean-grid'
+export * from './get-random-blocked-grid'
