@@ -1,4 +1,4 @@
-import { useEffect, useTransition } from 'react'
+import { useEffect, useState, useTransition } from 'react'
 import { useSearchParams } from 'react-router-dom'
 
 import { Grid } from './components'
@@ -6,14 +6,14 @@ import { InputRange } from './components/ui/input-range'
 import { MAX_NUMBER_COL, MAX_NUMBER_ROW } from './constants'
 import { getRandomString } from './lib'
 import { startBfsAlgorithm, useStore } from './store'
+import { getRandomBlockedGrid, getSubGrid } from './utils'
 
 function App() {
   const gridRows = useStore(state => state.gridRows)
-  const gridColumns = useStore(state => state.gridColumns)
-  const generateGrid = useStore(state => state.generateGrid)
+  const gridCols = useStore(state => state.gridColumns)
   const setGridRows = useStore(state => state.setGridRows)
   const setGridColumns = useStore(state => state.setGridColumns)
-  const setSeed = useStore(state => state.setSeed)
+  const setGrid = useStore(state => state.setGrid)
   const drawShortestPath = useStore(state => state.drawShortestPath)
   const resetGrid = useStore(state => state.resetGrid)
 
@@ -21,19 +21,21 @@ function App() {
   const [,startTransition] = useTransition()
   const seed = searchParams.get('seed')
 
-  useEffect(() => {
-    if (seed != null) {
-      setSeed(seed)
-      generateGrid(seed)
-    }
-  }, [gridRows, gridColumns])
+  const [baseGrid] = useState(getRandomBlockedGrid({ seed }))
+  const [subGrid] = useState(getSubGrid({ baseGrid, gridCols, gridRows }))
 
-  const handleReset = () => {
-    generateGrid()
+  useEffect(() => {
+    setGrid(subGrid)
+  }, [gridRows, gridCols])
+
+  const genRandomSeed = () => {
+    const newSeed = getRandomString()
     setParams(prev => {
-      prev.set('seed', getRandomString())
+      prev.set('seed', newSeed)
       return prev
     })
+    const newBaseGrid = getRandomBlockedGrid({ seed: newSeed })
+    setGrid(getSubGrid({ baseGrid: newBaseGrid, gridCols, gridRows }))
   }
 
   const startAlgorithm = async () => {
@@ -59,7 +61,7 @@ function App() {
           <button onClick={resetGrid} className='text-white bg-[#188AB0] hover:bg-[#17647e] focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800'>
             Reiniciar
           </button>
-          <button onClick={handleReset} className='text-white bg-[#188AB0] hover:bg-[#17647e] focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800'>
+          <button onClick={genRandomSeed} className='text-white bg-[#188AB0] hover:bg-[#17647e] focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800'>
             Generar aleatorio
           </button>
           <InputRange
@@ -71,7 +73,7 @@ function App() {
           <InputRange
             handleChange={(e) => { setGridColumns(parseInt(e.target.value)) }}
             textLabel='Número de columnas'
-            initalValue={gridColumns}
+            initalValue={gridCols}
             maxValue={MAX_NUMBER_COL}
           />
           <div className="">
