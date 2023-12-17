@@ -1,8 +1,7 @@
 import { create } from 'zustand'
 import { immer } from 'zustand/middleware/immer'
 
-import { getRandomString } from '../lib'
-import { getCleanGrid, getRandomBlockedGrid } from '../utils'
+import { getCleanGrid } from '../utils'
 
 import { type Coord, type Node } from '../types'
 
@@ -19,8 +18,8 @@ interface StoreAttributes {
 
 interface StoreMethods {
   setCurrNode: (node: Node) => void
-  generateGrid: (seed?: string) => void
   setGridRows: (rows: number) => void
+  setGrid: (grid: Node[][]) => void
   setGridColumns: (columns: number) => void
   blockNode: ({ i, j }: Coord) => void
   visitNode: ({ i, j, currNode }: Coord & { currNode: Node }) => void
@@ -71,19 +70,16 @@ export const useStore = create(immer<Store>((set, get) => ({
       state.isRunning = false
     })
   },
-  generateGrid: (initalSeed) => {
-    const seed = initalSeed ?? getRandomString()
+  setGrid: (grid) => {
     set(state => {
       const { gridRows, gridColumns, startCoord } = state
-      const cleanGrid = getCleanGrid(gridRows, gridColumns)
-      const randomGrid = getRandomBlockedGrid({ grid: cleanGrid, seed })
       const newEndCord = { i: gridRows - 1, j: gridColumns - 1 }
-      randomGrid[startCoord.i][startCoord.j].distance = 0
-      randomGrid[startCoord.i][startCoord.j].visited = true
-      randomGrid[startCoord.i][startCoord.j].blocked = false
-      randomGrid[newEndCord.i][newEndCord.j].blocked = false
+      state.grid = grid
+      state.grid[startCoord.i][startCoord.j].distance = 0
+      state.grid[startCoord.i][startCoord.j].visited = true
+      state.grid[startCoord.i][startCoord.j].blocked = false
+      state.grid[newEndCord.i][newEndCord.j].blocked = false
       state.endCoord = newEndCord
-      state.grid = randomGrid
       state.currNode = null
     })
   },
