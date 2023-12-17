@@ -16,7 +16,7 @@ interface StoreAttributes {
 
 interface StoreMethods {
   setCurrNode: (node: Node) => void
-  setGrid: (grid: Node[][], gridRows: number, gridCols: number) => void
+  setGrid: (grid: Node[][]) => void
   blockNode: ({ i, j }: Coord) => void
   visitNode: ({ i, j, currNode }: Coord & { currNode: Node }) => void
   drawShortestPath: () => void
@@ -66,16 +66,12 @@ export const useStore = create(immer<Store>((set, get) => ({
       state.isRunning = false
     })
   },
-  setGrid: (grid, gridRows, gridCols) => {
+  setGrid: (grid) => {
     set(state => {
-      const { startCoord } = state
-      const newEndCord = { i: gridRows - 1, j: gridCols - 1 }
+      const maxRows = grid.length
+      const maxCols = grid[0].length
       state.grid = grid
-      state.grid[startCoord.i][startCoord.j].distance = 0
-      state.grid[startCoord.i][startCoord.j].visited = true
-      state.grid[startCoord.i][startCoord.j].blocked = false
-      state.grid[newEndCord.i][newEndCord.j].blocked = false
-      state.endCoord = newEndCord
+      state.endCoord = { i: maxRows - 1, j: maxCols - 1 }
       state.currNode = null
     })
   },
