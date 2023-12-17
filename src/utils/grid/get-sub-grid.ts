@@ -24,6 +24,7 @@ export const getSubGrid = ({ baseGrid, gridCols, gridRows }: Props) => {
   subgrid[startCoord.i][startCoord.j].distance = 0
   subgrid[startCoord.i][startCoord.j].visited = true
   subgrid[startCoord.i][startCoord.j].blocked = false
+  subgrid[startCoord.i][startCoord.j].prevCoord = null
   subgrid[endCord.i][endCord.j].blocked = false
   return subgrid
 }
