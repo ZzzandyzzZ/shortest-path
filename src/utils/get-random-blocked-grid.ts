@@ -1,14 +1,16 @@
+import { getCleanGrid } from '.'
+import { MAX_NUMBER_COL, MAX_NUMBER_ROW } from '../constants'
 import { linearCongruentialGenerator } from '../lib/linear-congruential-generator'
-import { type Node } from '../types'
 
 interface Props {
-  grid: Node[][]
-  seed: string
+  seed: string | null
 }
 
-export const getRandomBlockedGrid = ({ grid, seed }: Props) => {
+export const getRandomBlockedGrid = ({ seed }: Props) => {
+  const initialGrid = getCleanGrid({ gridCols: MAX_NUMBER_COL, gridRows: MAX_NUMBER_ROW })
+  if (seed == null) return initialGrid
   const log = linearCongruentialGenerator(seed)
-  return grid.map(row => row.map(cell => ({
+  return initialGrid.map(row => row.map(cell => ({
     ...cell,
     blocked: log.next() % 10 < 4
   })))
