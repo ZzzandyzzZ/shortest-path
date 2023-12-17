@@ -10,7 +10,7 @@ import { getRandomBlockedGrid, getSubGrid, validateAndGetInt } from './utils'
 function App() {
   const setGrid = useStore(state => state.setGrid)
   const drawShortestPath = useStore(state => state.drawShortestPath)
-  const resetGrid = useStore(state => state.resetGrid)
+  const cleanGrid = useStore(state => state.cleanGrid)
 
   const [searchParams, setParams] = useSearchParams()
   const [,startTransition] = useTransition()
@@ -20,6 +20,7 @@ function App() {
   const baseGrid = useMemo(() => {
     return getRandomBlockedGrid({ seed })
   }, [seed])
+  const initalGrid = getSubGrid({ baseGrid, gridCols, gridRows })
 
   useEffect(() => {
     setParams(prev => {
@@ -30,14 +31,12 @@ function App() {
   }, [])
 
   useEffect(() => {
-    const subGrid = getSubGrid({ baseGrid, gridCols, gridRows })
-    setGrid(subGrid)
+    setGrid(initalGrid)
   }, [gridRows, gridCols, seed])
 
   const genRandomSeed = () => {
-    const newSeed = getRandomString()
     setParams(prev => {
-      prev.set('seed', newSeed)
+      prev.set('seed', getRandomString())
       return prev
     })
   }
@@ -48,7 +47,7 @@ function App() {
   }
 
   const handleStart = () => {
-    resetGrid()
+    cleanGrid(initalGrid)
     startTransition(() => {
       void startAlgorithm()
     })
@@ -62,7 +61,7 @@ function App() {
           <button onClick={handleStart} className='text-white bg-[#188AB0] hover:bg-[#17647e] focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800'>
             Iniciar
           </button>
-          <button onClick={resetGrid} className='text-white bg-[#188AB0] hover:bg-[#17647e] focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800'>
+          <button onClick={() => { cleanGrid(initalGrid) }} className='text-white bg-[#188AB0] hover:bg-[#17647e] focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800'>
             Reiniciar
           </button>
           <button onClick={genRandomSeed} className='text-white bg-[#188AB0] hover:bg-[#17647e] focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800'>
