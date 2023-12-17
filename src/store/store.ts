@@ -1,7 +1,7 @@
 import { create } from 'zustand'
 import { immer } from 'zustand/middleware/immer'
 
-import { getCleanGrid } from '../utils'
+import { getCleanGrid, getGridSize } from '../utils'
 
 import { type Coord, type Node } from '../types'
 
@@ -68,10 +68,9 @@ export const useStore = create(immer<Store>((set, get) => ({
   },
   setGrid: (grid) => {
     set(state => {
-      const maxRows = grid.length
-      const maxCols = grid[0].length
+      const { gridCols, gridRows } = getGridSize(grid)
       state.grid = grid
-      state.endCoord = { i: maxRows - 1, j: maxCols - 1 }
+      state.endCoord = { i: gridRows - 1, j: gridCols - 1 }
       state.currNode = null
     })
   },
