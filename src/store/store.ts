@@ -13,7 +13,6 @@ interface StoreAttributes {
   currNode: Node | null
   startCoord: Coord
   endCoord: Coord
-  seed: string | null
   isMousePressed: boolean
   isRunning: boolean
 }
@@ -24,7 +23,6 @@ interface StoreMethods {
   setGridRows: (rows: number) => void
   setGridColumns: (columns: number) => void
   blockNode: ({ i, j }: Coord) => void
-  setSeed: (seed: string) => void
   visitNode: ({ i, j, currNode }: Coord & { currNode: Node }) => void
   drawShortestPath: () => void
   resetGrid: () => void
@@ -35,20 +33,19 @@ interface StoreMethods {
 type Store = StoreAttributes & StoreMethods
 
 const defaultGridRows = 20
-const defaultGridColumns = 15
+const defaultGridCols = 15
 // const gridColumns = 66  // Max
 // const gridRows = 42
 const defaultStartCoord = { i: 0, j: 0 }
-const defaultEndCoord = { i: defaultGridRows - 1, j: defaultGridColumns - 1 }
+const defaultEndCoord = { i: defaultGridRows - 1, j: defaultGridCols - 1 }
 
 export const useStore = create(immer<Store>((set, get) => ({
-  grid: getCleanGrid(defaultGridRows, defaultGridColumns),
+  grid: getCleanGrid({ gridCols: defaultGridCols, gridRows: defaultGridRows }),
   gridRows: defaultGridRows,
-  gridColumns: defaultGridColumns,
+  gridColumns: defaultGridCols,
   startCoord: defaultStartCoord,
   endCoord: defaultEndCoord,
   currNode: null,
-  seed: null,
   isMousePressed: false,
   isRunning: false,
   setCurrNode: (node: Node) => {
@@ -87,7 +84,6 @@ export const useStore = create(immer<Store>((set, get) => ({
       randomGrid[newEndCord.i][newEndCord.j].blocked = false
       state.endCoord = newEndCord
       state.grid = randomGrid
-      state.seed = seed
       state.currNode = null
     })
   },
@@ -96,9 +92,6 @@ export const useStore = create(immer<Store>((set, get) => ({
   },
   setGridColumns: (columns: number) => {
     set({ gridColumns: columns })
-  },
-  setSeed: (seed: string) => {
-    set({ seed })
   },
   visitNode: ({ i, j, currNode }: Coord & { currNode: Node }) => {
     set(state => {
