@@ -3,10 +3,10 @@ import { immer } from 'zustand/middleware/immer'
 
 import { getCleanGrid, getGridSize } from '../utils'
 
-import { type Coord, type Node } from '../types'
+import { type Coord, type Grid, type Node } from '../types'
 
 interface StoreAttributes {
-  grid: Node[][]
+  grid: Grid
   currNode: Node | null
   startCoord: Coord
   endCoord: Coord
@@ -16,11 +16,11 @@ interface StoreAttributes {
 
 interface StoreMethods {
   setCurrNode: (node: Node) => void
-  setGrid: (grid: Node[][]) => void
+  setGrid: (grid: Grid) => void
   blockNode: ({ i, j }: Coord) => void
   visitNode: ({ i, j, currNode }: Coord & { currNode: Node }) => void
   drawShortestPath: () => void
-  cleanGrid: (initalGrid: Node[][]) => void
+  cleanGrid: (initalGrid: Grid) => void
   setIsMousePressed: (isMousePressed: boolean) => void
   setIsRunning: (isRunning: boolean) => void
 }
@@ -46,7 +46,7 @@ export const useStore = create(immer<Store>((set, get) => ({
   setCurrNode: (node: Node) => {
     set({ currNode: node })
   },
-  cleanGrid: (initalGrid: Node[][]) => {
+  cleanGrid: (initalGrid: Grid) => {
     const { grid } = get()
     const cleanGrid = initalGrid
       .map((row, i) => row.map((cell, j) => ({ ...cell, blocked: grid[i][j].blocked })))

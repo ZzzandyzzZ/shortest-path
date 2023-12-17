@@ -1,7 +1,7 @@
-import { type Node } from '../../types'
+import { type Grid } from '../../types'
 
 interface Props {
-  baseGrid: Node[][]
+  baseGrid: Grid
   gridCols: number
   gridRows: number
 }
