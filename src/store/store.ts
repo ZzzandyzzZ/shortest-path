@@ -20,7 +20,7 @@ interface StoreMethods {
   blockNode: ({ i, j }: Coord) => void
   visitNode: ({ i, j, currNode }: Coord & { currNode: Node }) => void
   drawShortestPath: () => void
-  resetGrid: () => void
+  cleanGrid: (initalGrid: Node[][]) => void
   setIsMousePressed: (isMousePressed: boolean) => void
   setIsRunning: (isRunning: boolean) => void
 }
@@ -46,25 +46,11 @@ export const useStore = create(immer<Store>((set, get) => ({
   setCurrNode: (node: Node) => {
     set({ currNode: node })
   },
-  resetGrid: () => {
-    set(state => {
-      const { gridRows, gridColumns, startCoord, endCoord, grid } = state
-      const cleanGrid = getCleanGrid(gridRows, gridColumns)
-      grid.forEach((row, i) => {
-        row.forEach(({ blocked }, j) => {
-          if (blocked) {
-            cleanGrid[i][j].blocked = true
-          }
-        })
-      })
-      cleanGrid[startCoord.i][startCoord.j].distance = 0
-      cleanGrid[startCoord.i][startCoord.j].visited = true
-      cleanGrid[startCoord.i][startCoord.j].blocked = false
-      cleanGrid[endCoord.i][endCoord.j].blocked = false
-      state.grid = cleanGrid
-      state.currNode = null
-      state.isRunning = false
-    })
+  cleanGrid: (initalGrid: Node[][]) => {
+    const { grid } = get()
+    const cleanGrid = initalGrid
+      .map((row, i) => row.map((cell, j) => ({ ...cell, blocked: grid[i][j].blocked })))
+    set({ grid: cleanGrid, currNode: null, isRunning: false })
   },
   setGrid: (grid) => {
     set(state => {
