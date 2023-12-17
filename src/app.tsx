@@ -3,14 +3,16 @@ import { useSearchParams } from 'react-router-dom'
 
 import { Grid } from './components'
 import { InputRange } from './components/ui/input-range'
-import { MAX_NUMBER_COL } from './constants'
+import { MAX_NUMBER_COL, MAX_NUMBER_ROW } from './constants'
 import { getRandomString } from './lib'
 import { startBfsAlgorithm, useStore } from './store'
 
 function App() {
+  const gridRows = useStore(state => state.gridRows)
+  const gridColumns = useStore(state => state.gridColumns)
   const generateGrid = useStore(state => state.generateGrid)
   const setGridRows = useStore(state => state.setGridRows)
-  const gridRows = useStore(state => state.gridRows)
+  const setGridColumns = useStore(state => state.setGridColumns)
   const setSeed = useStore(state => state.setSeed)
   const drawShortestPath = useStore(state => state.drawShortestPath)
   const resetGrid = useStore(state => state.resetGrid)
@@ -24,7 +26,7 @@ function App() {
       setSeed(seed)
       generateGrid(seed)
     }
-  }, [gridRows])
+  }, [gridRows, gridColumns])
 
   const handleReset = () => {
     generateGrid()
@@ -33,10 +35,12 @@ function App() {
       return prev
     })
   }
+
   const startAlgorithm = async () => {
     await startBfsAlgorithm()
     drawShortestPath()
   }
+
   const handleStart = () => {
     resetGrid()
     startTransition(() => {
@@ -58,12 +62,18 @@ function App() {
           <button onClick={handleReset} className='text-white bg-[#188AB0] hover:bg-[#17647e] focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800'>
             Generar aleatorio
           </button>
-          <InputRange handleChange={(e) => { setGridRows(parseInt(e.target.value)) }} textLabel='Número de filas' initalValue={gridRows}/>
-
-          <div className=''>
-            <label htmlFor="steps-range" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Número de columnas</label>
-            <input id="steps-range" type="range" min="4" max={MAX_NUMBER_COL} step="2" className="w-full h-2 bg-white rounded-lg appearance-none cursor-pointer" />
-          </div>
+          <InputRange
+            handleChange={(e) => { setGridRows(parseInt(e.target.value)) }}
+            textLabel='Número de filas'
+            initalValue={gridRows}
+            maxValue={MAX_NUMBER_ROW}
+          />
+          <InputRange
+            handleChange={(e) => { setGridColumns(parseInt(e.target.value)) }}
+            textLabel='Número de columnas'
+            initalValue={gridColumns}
+            maxValue={MAX_NUMBER_COL}
+          />
           <div className="">
             <label htmlFor='algorithm' className="">
               Selecciona Algoritmo
