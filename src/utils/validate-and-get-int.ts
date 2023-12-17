@@ -1,4 +1,4 @@
 export const validateAndGetInt = (value: string | null, defaultValue: number) =>
-  (Number.isInteger(value) && value != null)
+  (value != null && /^[0-9]+$/.test(value))
     ? parseInt(value)
     : defaultValue
