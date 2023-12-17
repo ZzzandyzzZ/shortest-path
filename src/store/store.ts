@@ -6,8 +6,6 @@ import { getCleanGrid } from '../utils'
 import { type Coord, type Node } from '../types'
 
 interface StoreAttributes {
-  gridRows: number
-  gridColumns: number
   grid: Node[][]
   currNode: Node | null
   startCoord: Coord
@@ -18,9 +16,7 @@ interface StoreAttributes {
 
 interface StoreMethods {
   setCurrNode: (node: Node) => void
-  setGridRows: (rows: number) => void
-  setGrid: (grid: Node[][]) => void
-  setGridColumns: (columns: number) => void
+  setGrid: (grid: Node[][], gridRows: number, gridCols: number) => void
   blockNode: ({ i, j }: Coord) => void
   visitNode: ({ i, j, currNode }: Coord & { currNode: Node }) => void
   drawShortestPath: () => void
@@ -70,10 +66,10 @@ export const useStore = create(immer<Store>((set, get) => ({
       state.isRunning = false
     })
   },
-  setGrid: (grid) => {
+  setGrid: (grid, gridRows, gridCols) => {
     set(state => {
-      const { gridRows, gridColumns, startCoord } = state
-      const newEndCord = { i: gridRows - 1, j: gridColumns - 1 }
+      const { startCoord } = state
+      const newEndCord = { i: gridRows - 1, j: gridCols - 1 }
       state.grid = grid
       state.grid[startCoord.i][startCoord.j].distance = 0
       state.grid[startCoord.i][startCoord.j].visited = true
@@ -82,12 +78,6 @@ export const useStore = create(immer<Store>((set, get) => ({
       state.endCoord = newEndCord
       state.currNode = null
     })
-  },
-  setGridRows: (rows: number) => {
-    set({ gridRows: rows })
-  },
-  setGridColumns: (columns: number) => {
-    set({ gridColumns: columns })
   },
   visitNode: ({ i, j, currNode }: Coord & { currNode: Node }) => {
     set(state => {

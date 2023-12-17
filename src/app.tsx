@@ -8,8 +8,6 @@ import { startBfsAlgorithm, useStore } from './store'
 import { getRandomBlockedGrid, getSubGrid, validateAndGetInt } from './utils'
 
 function App() {
-  const setGridRows = useStore(state => state.setGridRows)
-  const setGridColumns = useStore(state => state.setGridColumns)
   const setGrid = useStore(state => state.setGrid)
   const drawShortestPath = useStore(state => state.drawShortestPath)
   const resetGrid = useStore(state => state.resetGrid)
@@ -31,7 +29,7 @@ function App() {
   }, [])
 
   useEffect(() => {
-    setGrid(subGrid)
+    setGrid(subGrid, gridRows, gridCols)
   }, [gridRows, gridCols])
 
   const genRandomSeed = () => {
@@ -41,7 +39,8 @@ function App() {
       return prev
     })
     const newBaseGrid = getRandomBlockedGrid({ seed: newSeed })
-    setGrid(getSubGrid({ baseGrid: newBaseGrid, gridCols, gridRows }))
+    const subGrid = getSubGrid({ baseGrid: newBaseGrid, gridCols, gridRows })
+    setGrid(subGrid, gridRows, gridCols)
   }
 
   const startAlgorithm = async () => {
@@ -71,13 +70,23 @@ function App() {
             Generar aleatorio
           </button>
           <InputRange
-            handleChange={(e) => { setGridRows(parseInt(e.target.value)) }}
+            handleChange={(e) => {
+              setParams(prev => {
+                prev.set('grid_rows', e.target.value)
+                return prev
+              })
+            }}
             textLabel='Número de filas'
             initalValue={gridRows}
             maxValue={MAX_NUMBER_ROW}
           />
           <InputRange
-            handleChange={(e) => { setGridColumns(parseInt(e.target.value)) }}
+            handleChange={(e) => {
+              setParams(prev => {
+                prev.set('grid_cols', e.target.value)
+                return prev
+              })
+            }}
             textLabel='Número de columnas'
             initalValue={gridCols}
             maxValue={MAX_NUMBER_COL}
