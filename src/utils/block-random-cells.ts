@@ -2,12 +2,12 @@ import { linearCongruentialGenerator } from '../lib/linear-congruential-generato
 import { type Node } from '../types'
 
 interface Props {
-  initialGrid: Node[][]
+  grid: Node[][]
   seed: string
 }
-export const generateRandomGrid = ({ initialGrid, seed }: Props) => {
+export const blockRandomCells = ({ grid, seed }: Props) => {
   const log = linearCongruentialGenerator(seed)
-  return initialGrid.map(row => row.map(cell => ({
+  return grid.map(row => row.map(cell => ({
     ...cell,
     blocked: log.next() % 10 < 4
   })))
