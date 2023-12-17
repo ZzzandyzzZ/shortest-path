@@ -1,6 +1,6 @@
-import { getCleanGrid } from '.'
-import { MAX_NUMBER_COL, MAX_NUMBER_ROW } from '../constants'
-import { linearCongruentialGenerator } from '../lib/linear-congruential-generator'
+import { getCleanGrid } from '..'
+import { MAX_NUMBER_COL, MAX_NUMBER_ROW } from '../../constants'
+import { linearCongruentialGenerator } from '../../lib/linear-congruential-generator'
 
 interface Props {
   seed: string | null
