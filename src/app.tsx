@@ -1,4 +1,4 @@
-import { useEffect, useState, useTransition } from 'react'
+import { useEffect, useMemo, useTransition } from 'react'
 import { useSearchParams } from 'react-router-dom'
 
 import { Grid, InputRange } from './components'
@@ -17,8 +17,9 @@ function App() {
   const seed = searchParams.get('seed')
   const gridRows = validateAndGetInt(searchParams.get('grid_rows'), DEFAULT_GRID_ROWS)
   const gridCols = validateAndGetInt(searchParams.get('grid_cols'), DEFAULT_GRID_COLS)
-  const [baseGrid] = useState(getRandomBlockedGrid({ seed }))
-  const [subGrid] = useState(getSubGrid({ baseGrid, gridCols, gridRows }))
+  const baseGrid = useMemo(() => {
+    return getRandomBlockedGrid({ seed })
+  }, [seed])
 
   useEffect(() => {
     setParams(prev => {
@@ -29,8 +30,9 @@ function App() {
   }, [])
 
   useEffect(() => {
-    setGrid(subGrid, gridRows, gridCols)
-  }, [gridRows, gridCols])
+    const subGrid = getSubGrid({ baseGrid, gridCols, gridRows })
+    setGrid(subGrid)
+  }, [gridRows, gridCols, seed])
 
   const genRandomSeed = () => {
     const newSeed = getRandomString()
@@ -38,9 +40,6 @@ function App() {
       prev.set('seed', newSeed)
       return prev
     })
-    const newBaseGrid = getRandomBlockedGrid({ seed: newSeed })
-    const subGrid = getSubGrid({ baseGrid: newBaseGrid, gridCols, gridRows })
-    setGrid(subGrid, gridRows, gridCols)
   }
 
   const startAlgorithm = async () => {
