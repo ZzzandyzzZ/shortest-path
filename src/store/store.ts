@@ -1,9 +1,9 @@
 import { create } from 'zustand'
 import { immer } from 'zustand/middleware/immer'
 
-import { getCleanGrid, getGridSize } from '../utils'
+import { getGridSize } from '../utils'
 
-import { type Coord, type Grid, type Node } from '../types'
+import type { Coord, Grid, Node } from '../types'
 
 interface StoreAttributes {
   grid: Grid
@@ -27,17 +27,11 @@ interface StoreMethods {
 
 type Store = StoreAttributes & StoreMethods
 
-const defaultGridRows = 20
-const defaultGridCols = 15
-// const gridColumns = 66  // Max
-// const gridRows = 42
 const defaultStartCoord = { i: 0, j: 0 }
-const defaultEndCoord = { i: defaultGridRows - 1, j: defaultGridCols - 1 }
+const defaultEndCoord = { i: 1, j: 1 }
 
 export const useStore = create(immer<Store>((set, get) => ({
-  grid: getCleanGrid({ gridCols: defaultGridCols, gridRows: defaultGridRows }),
-  gridRows: defaultGridRows,
-  gridColumns: defaultGridCols,
+  grid: [],
   startCoord: defaultStartCoord,
   endCoord: defaultEndCoord,
   currNode: null,
