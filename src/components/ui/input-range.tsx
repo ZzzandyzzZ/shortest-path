@@ -17,7 +17,7 @@ export const InputRange = ({ textLabel, initalValue, handleChange, maxValue }: P
         value={initalValue}
         step="2"
         onChange={handleChange}
-        className="w-full h-2 rounded-lg appearance-none cursor-pointer" />
+        className="w-full h-2 rounded-lg appearance-none cursor-pointer accent-lazuli-400" />
     </div>
   )
 }
