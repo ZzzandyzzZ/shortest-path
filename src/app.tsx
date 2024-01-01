@@ -56,7 +56,7 @@ function App() {
   return (
     <>
       <main className='grid grid-cols-12 min-h-screen text-white'>
-        <section className='flex flex-col bg-base col-span-3 p-3 gap-3'>
+        <section className='flex flex-col bg-lazuli-900 col-span-3 p-3 gap-3'>
           <h1 className="text-3xl text-center py-5 font-black">Shortest Path Algorithms</h1>
           <Button onClick={handleStart}>
             Iniciar
@@ -100,7 +100,7 @@ function App() {
             </select>
           </div>
         </section>
-        <section className='col-span-9 bg-subbase flex items-center justify-center'>
+        <section className='col-span-9 bg-lazuli-800 flex items-center justify-center'>
           <Grid />
         </section>
       </main>
