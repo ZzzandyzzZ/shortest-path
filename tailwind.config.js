@@ -4,15 +4,22 @@ export default {
   theme: {
     extend: {
       colors: {
-        base: "#0B2447",
-        subbase: "#19376D",
-        contrast: "#52649A",
-        contrastDark: "#2F4471",
-        contrastLight: "#6A8EAD",
-        bright: "#A5D7E8",
+        /** https://coolors.co/002147-15325c-294371-3e5486-52649a-6781ae-7c9ec1-91bbd5-a5d7e8-dff1f7 **/
+        lazuli: {
+          900: "#002147ff",
+          800: "#15325cff",
+          700: "#294371ff",
+          600: "#3e5486ff",
+          500: "#52649aff",
+          400: "#6781aeff",
+          300: "#7c9ec1ff",
+          200: "#91bbd5ff",
+          100: "#a5d7e8ff",
+          50: "#dff1f7f",
+        },
       },
       boxShadow: {
-        blue: "0px 5px 0px #2a497e",
+        lazuli500: "0px 5px 0px #294371ff",
       },
     },
   },
