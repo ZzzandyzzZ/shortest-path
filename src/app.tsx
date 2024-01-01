@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useTransition } from 'react'
 import { useSearchParams } from 'react-router-dom'
 
-import { Grid, InputRange } from './components'
+import { Button, Grid, InputRange } from './components'
 import { DEFAULT_GRID_COLS, DEFAULT_GRID_ROWS, MAX_NUMBER_COL, MAX_NUMBER_ROW } from './constants'
 import { getRandomString } from './lib'
 import { startBfsAlgorithm, useStore } from './store'
@@ -58,15 +58,15 @@ function App() {
       <main className='grid grid-cols-12 min-h-screen text-white'>
         <section className='flex flex-col bg-base col-span-3 p-3 gap-3'>
           <h1 className="text-3xl text-center py-5 font-black">Shortest Path Algorithms</h1>
-          <button onClick={handleStart} className='bg-contrast hover:bg-[#17647e] focus:outline-none focus:ring-4 focus:ring-blue-300 rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 font-bold'>
+          <Button onClick={handleStart}>
             Iniciar
-          </button>
-          <button onClick={() => { cleanGrid(initalGrid) }} className='bg-contrast hover:bg-[#17647e] focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800'>
+          </Button>
+          <Button onClick={() => { cleanGrid(initalGrid) }}>
             Reiniciar
-          </button>
-          <button onClick={genRandomSeed} className='bg-contrast hover:bg-[#17647e] focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800'>
+          </Button>
+          <Button onClick={genRandomSeed}>
             Generar aleatorio
-          </button>
+          </Button>
           <InputRange
             handleChange={(e) => {
               setParams(prev => {
