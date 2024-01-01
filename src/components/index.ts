@@ -1,4 +1,3 @@
-export * from './grid';
-export * from './grid-cell';
-export * from './ui';
-
+export * from './grid'
+export * from './grid-cell'
+export * from './ui'

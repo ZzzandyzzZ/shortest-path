@@ -5,6 +5,18 @@ settings:
   excludeLinksFromLockfile: false
 
 dependencies:
+  '@fontsource-variable/onest':
+    specifier: ^5.0.2
+    version: 5.0.2
+  '@fontsource-variable/roboto-slab':
+    specifier: ^5.0.18
+    version: 5.0.18
+  '@fontsource/lilita-one':
+    specifier: ^5.0.18
+    version: 5.0.18
+  '@fontsource/roboto':
+    specifier: ^5.0.8
+    version: 5.0.8
   immer:
     specifier: ^10.0.3
     version: 10.0.3
@@ -323,6 +335,22 @@ packages:
     resolution: {integrity: sha512-ut5V+D+fOoWPgGGNj83GGjnntO39xDy6DWxO0wb7Jp3DcMX0TfIqdzHF85VTQkerdyGmuuMD9AKAo5KiNlf/AQ==}
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
     dev: true
+
+  /@fontsource-variable/onest@5.0.2:
+    resolution: {integrity: sha512-XsH6q+/OyO0Oba4OB/NkiQu3ON93U2Kx+1YxKpNZMuS+a+WvxipwhO8Und2CC0mLI33xOZzTWUk4wtnsUJzjCQ==}
+    dev: false
+
+  /@fontsource-variable/roboto-slab@5.0.18:
+    resolution: {integrity: sha512-YWX76puTPIVSkJBvtC2bvInZxCJtgSsYGej9LD3CuqJPsg7qltaFCe0dkhuxt/OFY6rkiwfdcWzASdurGw5w9w==}
+    dev: false
+
+  /@fontsource/lilita-one@5.0.18:
+    resolution: {integrity: sha512-xdi3GUjIuzRsJdQyunugonrAA8xvB69Ld/neCITXdyzmz35Y9KkrFaH32WwkXj8btrwRtKovkMS8zKnT0754IA==}
+    dev: false
+
+  /@fontsource/roboto@5.0.8:
+    resolution: {integrity: sha512-XxPltXs5R31D6UZeLIV1td3wTXU3jzd3f2DLsXI8tytMGBkIsGcc9sIyiupRtA8y73HAhuSCeweOoBqf6DbWCA==}
+    dev: false
 
   /@humanwhocodes/config-array@0.11.13:
     resolution: {integrity: sha512-JSBDMiDKSzQVngfRjOdFXgFfklaXI4K9nLF49Auh21lmBWRLIK3+xTErTWD4KU54pb6coM6ESE7Awz/FNU3zgQ==}

@@ -55,10 +55,10 @@ function App() {
 
   return (
     <>
-      <main className='grid grid-cols-12  min-h-screen '>
-        <section className='flex flex-col bg-base col-span-3 p-3 gap-3 text-white'>
-          <h1 className="text-2xl text-center font-bold py-5">Shortest Path algorithms</h1>
-          <button onClick={handleStart} className='bg-contrast hover:bg-[#17647e] focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800'>
+      <main className='grid grid-cols-12 min-h-screen text-white'>
+        <section className='flex flex-col bg-base col-span-3 p-3 gap-3'>
+          <h1 className="text-3xl text-center py-5 font-black">Shortest Path Algorithms</h1>
+          <button onClick={handleStart} className='bg-contrast hover:bg-[#17647e] focus:outline-none focus:ring-4 focus:ring-blue-300 rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 font-bold'>
             Iniciar
           </button>
           <button onClick={() => { cleanGrid(initalGrid) }} className='bg-contrast hover:bg-[#17647e] focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800'>
