@@ -16,13 +16,13 @@ export const GridCell = memo(({ i, j, isCurrNode, isMousePressed, node: { partOf
   const endCoord = useStore(state => state.endCoord)
   const blockNode = useStore(state => state.blockNode)
   const getBgColor = () => {
-    if (blocked) return 'bg-black'
+    if (blocked) return 'bg-base'
     if (i === startCoord.i && j === startCoord.j) return 'bg-green-600'
     if (i === endCoord.i && j === endCoord.j) return 'bg-red-600'
     if (isCurrNode) return 'bg-orange-400'
-    if (partOfSolution) return 'bg-blue-600'
-    if (visited) return 'bg-[#a8e1f4]'
-    return 'bg-blue-100'
+    if (partOfSolution) return 'bg-contrast'
+    if (visited) return 'bg-bright'
+    return 'bg-white'
   }
 
   const handleMouseEnter = () => {

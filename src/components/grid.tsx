@@ -8,7 +8,7 @@ export const Grid = () => {
   const setIsMousePressed = useStore((state) => state.setIsMousePressed)
 
   return (
-    <div className='overflow-auto'>
+    <div className='overflow-auto border-2'>
       <table
         onMouseLeave={() => { setIsMousePressed(false) }}
         onMouseDown={() => { setIsMousePressed(true) }}

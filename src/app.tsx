@@ -55,16 +55,16 @@ function App() {
 
   return (
     <>
-      <main className='grid grid-cols-12  min-h-screen'>
-        <section className='flex flex-col bg-[#DCEEC6] col-span-3 p-3 gap-3'>
+      <main className='grid grid-cols-12  min-h-screen '>
+        <section className='flex flex-col bg-base col-span-3 p-3 gap-3 text-white'>
           <h1 className="text-2xl text-center font-bold py-5">Shortest Path algorithms</h1>
-          <button onClick={handleStart} className='text-white bg-[#188AB0] hover:bg-[#17647e] focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800'>
+          <button onClick={handleStart} className='bg-contrast hover:bg-[#17647e] focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800'>
             Iniciar
           </button>
-          <button onClick={() => { cleanGrid(initalGrid) }} className='text-white bg-[#188AB0] hover:bg-[#17647e] focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800'>
+          <button onClick={() => { cleanGrid(initalGrid) }} className='bg-contrast hover:bg-[#17647e] focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800'>
             Reiniciar
           </button>
-          <button onClick={genRandomSeed} className='text-white bg-[#188AB0] hover:bg-[#17647e] focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800'>
+          <button onClick={genRandomSeed} className='bg-contrast hover:bg-[#17647e] focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800'>
             Generar aleatorio
           </button>
           <InputRange
@@ -100,7 +100,7 @@ function App() {
             </select>
           </div>
         </section>
-        <section className='col-span-9 bg-white flex items-center justify-center'>
+        <section className='col-span-9 bg-subbase flex items-center justify-center'>
           <Grid />
         </section>
       </main>
