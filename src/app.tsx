@@ -56,7 +56,7 @@ function App() {
   return (
     <>
       <main className='grid grid-cols-12 min-h-screen text-white'>
-        <section className='flex flex-col bg-lazuli-900 col-span-3 p-3 gap-3'>
+        <nav className='flex flex-col bg-lazuli-900 col-span-3 p-3 gap-3'>
           <h1 className="text-3xl text-center py-5 font-black">Shortest Path Algorithms</h1>
           <Button onClick={handleStart}>
             Iniciar
@@ -74,7 +74,7 @@ function App() {
                 return prev
               })
             }}
-            textLabel='Número de filas'
+            textLabel='Filas'
             initalValue={gridRows}
             maxValue={MAX_NUMBER_ROW}
           />
@@ -85,7 +85,7 @@ function App() {
                 return prev
               })
             }}
-            textLabel='Número de columnas'
+            textLabel='Columnas'
             initalValue={gridCols}
             maxValue={MAX_NUMBER_COL}
           />
@@ -99,7 +99,7 @@ function App() {
               <option value="washington">Disjktra</option>
             </select>
           </div>
-        </section>
+        </nav>
         <section className='col-span-9 bg-lazuli-800 flex items-center justify-center'>
           <Grid />
         </section>
