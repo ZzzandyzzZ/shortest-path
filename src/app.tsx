@@ -1,10 +1,10 @@
 import { useEffect, useMemo, useTransition } from 'react'
 import { useSearchParams } from 'react-router-dom'
 
-import { Button, Dropdown, Grid, InputRange } from './components'
-import { DEFAULT_GRID_COLS, DEFAULT_GRID_ROWS, MAX_NUMBER_COL, MAX_NUMBER_ROW } from './constants'
-import { getRandomString } from './lib'
-import { startBfsAlgorithm, useStore } from './store'
+import { Grid } from './components'
+import { Navbar } from './components/navbar/navbar'
+import { DEFAULT_GRID_COLS, DEFAULT_GRID_ROWS } from './constants'
+import { useStore } from './store'
 import { getRandomBlockedGrid, getSubGrid, validateAndGetInt } from './utils'
 
 function App() {
@@ -34,64 +34,10 @@ function App() {
     setGrid(initalGrid)
   }, [gridRows, gridCols, seed])
 
-  const genRandomSeed = () => {
-    setParams(prev => {
-      prev.set('seed', getRandomString())
-      return prev
-    })
-  }
-
-  const startAlgorithm = async () => {
-    await startBfsAlgorithm()
-    drawShortestPath()
-  }
-
-  const handleStart = () => {
-    cleanGrid(initalGrid)
-    startTransition(() => {
-      void startAlgorithm()
-    })
-  }
-
   return (
     <>
       <main className='grid grid-cols-12 min-h-screen text-white'>
-        <nav className='flex flex-col bg-lazuli-900 col-span-3 p-3 gap-3 text-sm'>
-          <h1 className="text-3xl text-center py-5 font-black">Shortest Path Algorithms</h1>
-          <Button onClick={handleStart}>
-            Iniciar
-          </Button>
-          <Button onClick={() => { cleanGrid(initalGrid) }}>
-            Limpiar
-          </Button>
-          <Button onClick={genRandomSeed}>
-            Generar aleatorio
-          </Button>
-          <Dropdown />
-          <InputRange
-            handleChange={(e) => {
-              setParams(prev => {
-                prev.set('grid_rows', e.target.value)
-                return prev
-              })
-            }}
-            textLabel='Filas'
-            initalValue={gridRows}
-            maxValue={MAX_NUMBER_ROW}
-          />
-          <InputRange
-            handleChange={(e) => {
-              setParams(prev => {
-                prev.set('grid_cols', e.target.value)
-                return prev
-              })
-            }}
-            textLabel='Columnas'
-            initalValue={gridCols}
-            maxValue={MAX_NUMBER_COL}
-          />
-
-        </nav>
+        <Navbar />
         <section className='col-span-9 bg-lazuli-800 flex items-center justify-center'>
           <Grid />
         </section>
