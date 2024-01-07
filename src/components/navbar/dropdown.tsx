@@ -20,9 +20,9 @@ export const Dropdown = () => {
           <span className={`relative transition-all w-3 bg-white h-1 rounded-2xl ${isOpen ? 'rotate-45' : '-rotate-45'}`}></span>
         </div>
       </Button>
-      <ul className={`bg-lazuli-400 overflow-hidden absolute rounded-lg transition-all duration-200 origin-top left-0 right-0 mx-2 ${isOpen ? 'opacity-100 scale-100' : 'opacity-0 scale-0'}`}>
+      <ul className={`overflow-hidden absolute rounded-lg transition-all duration-200 origin-top left-0 right-0 mx-2 ${isOpen ? 'scale-100' : ' scale-0'}`}>
         {options.map(option =>
-          <li key={option} onClick={selectAlgorithm} className="px-4 py-2 hover:bg-lazuli-300 hover:opacity-100 opacity-95">
+          <li key={option} onClick={selectAlgorithm} className={`px-4 py-2 bg-lazuli-400  hover:bg-lazuli-300 transition-all duration-500 hover:opacity-100 ${isOpen ? 'opacity-90' : 'opacity-0'}`}>
             {option}
           </li>
         )}
