@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useTransition } from 'react'
 import { useSearchParams } from 'react-router-dom'
 
-import { Button, Grid, InputRange } from './components'
+import { Button, Dropdown, Grid, InputRange } from './components'
 import { DEFAULT_GRID_COLS, DEFAULT_GRID_ROWS, MAX_NUMBER_COL, MAX_NUMBER_ROW } from './constants'
 import { getRandomString } from './lib'
 import { startBfsAlgorithm, useStore } from './store'
@@ -56,17 +56,18 @@ function App() {
   return (
     <>
       <main className='grid grid-cols-12 min-h-screen text-white'>
-        <nav className='flex flex-col bg-lazuli-900 col-span-3 p-3 gap-3'>
+        <nav className='flex flex-col bg-lazuli-900 col-span-3 p-3 gap-3 text-sm'>
           <h1 className="text-3xl text-center py-5 font-black">Shortest Path Algorithms</h1>
           <Button onClick={handleStart}>
             Iniciar
           </Button>
           <Button onClick={() => { cleanGrid(initalGrid) }}>
-            Reiniciar
+            Limpiar
           </Button>
           <Button onClick={genRandomSeed}>
             Generar aleatorio
           </Button>
+          <Dropdown />
           <InputRange
             handleChange={(e) => {
               setParams(prev => {
@@ -89,16 +90,7 @@ function App() {
             initalValue={gridCols}
             maxValue={MAX_NUMBER_COL}
           />
-          <div className="">
-            <label htmlFor='algorithm' className="">
-              Selecciona Algoritmo
-            </label>
-            <select id="algorithm" className="">
-              <option value="brazil">BFS</option>
-              <option value="bucharest">A *</option>
-              <option value="washington">Disjktra</option>
-            </select>
-          </div>
+
         </nav>
         <section className='col-span-9 bg-lazuli-800 flex items-center justify-center'>
           <Grid />
