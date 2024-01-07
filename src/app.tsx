@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useTransition } from 'react'
+import { useEffect, useMemo } from 'react'
 import { useSearchParams } from 'react-router-dom'
 
 import { Grid } from './components'
@@ -9,11 +9,8 @@ import { getRandomBlockedGrid, getSubGrid, validateAndGetInt } from './utils'
 
 function App() {
   const setGrid = useStore(state => state.setGrid)
-  const drawShortestPath = useStore(state => state.drawShortestPath)
-  const cleanGrid = useStore(state => state.cleanGrid)
 
   const [searchParams, setParams] = useSearchParams()
-  const [,startTransition] = useTransition()
   const seed = searchParams.get('seed')
   const gridRows = validateAndGetInt(searchParams.get('grid_rows'), DEFAULT_GRID_ROWS)
   const gridCols = validateAndGetInt(searchParams.get('grid_cols'), DEFAULT_GRID_COLS)
