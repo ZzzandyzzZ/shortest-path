@@ -1,11 +1,11 @@
 import { useEffect, useMemo, useTransition } from 'react'
 import { useSearchParams } from 'react-router-dom'
 
-import { Button, InputRange } from '../../components'
-import { DEFAULT_GRID_COLS, DEFAULT_GRID_ROWS, MAX_NUMBER_COL, MAX_NUMBER_ROW } from '../../constants'
-import { getRandomString } from '../../lib'
-import { startBfsAlgorithm, useStore } from '../../store'
-import { getRandomBlockedGrid, getSubGrid, validateAndGetInt } from '../../utils'
+import { Button, InputRange } from '@/components'
+import { DEFAULT_GRID_COLS, DEFAULT_GRID_ROWS, MAX_NUMBER_COL, MAX_NUMBER_ROW } from '@/constants'
+import { getRandomString } from '@/lib'
+import { startBfsAlgorithm, useStore } from '@/store'
+import { getRandomBlockedGrid, getSubGrid, validateAndGetInt } from '@/utils'
 import { Dropdown } from './dropdown'
 
 export const Navbar = () => {

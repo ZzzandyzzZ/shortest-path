@@ -1,11 +1,10 @@
 import { useEffect, useMemo } from 'react'
 import { useSearchParams } from 'react-router-dom'
 
-import { Grid } from './components'
-import { Navbar } from './components/navbar/navbar'
-import { DEFAULT_GRID_COLS, DEFAULT_GRID_ROWS } from './constants'
-import { useStore } from './store'
-import { getRandomBlockedGrid, getSubGrid, validateAndGetInt } from './utils'
+import { Grid, Navbar } from '@/components'
+import { DEFAULT_GRID_COLS, DEFAULT_GRID_ROWS } from '@/constants'
+import { useStore } from '@/store'
+import { getRandomBlockedGrid, getSubGrid, validateAndGetInt } from '@/utils'
 
 function App() {
   const setGrid = useStore(state => state.setGrid)
