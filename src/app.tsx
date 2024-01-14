@@ -32,7 +32,7 @@ function App() {
 
   return (
     <>
-      <main className='grid grid-cols-12 min-h-screen text-white'>
+      <main className='grid grid-cols-12 min-h-screen text-white cursor-default'>
         <Navbar />
         <section className='col-span-9 bg-lazuli-800 flex items-center justify-center'>
           <Grid />
