@@ -10,11 +10,11 @@ interface Props {
   i: number
   j: number
   isCurrNode: boolean
-  isMousePressed: boolean
+  isHoldingClickRef: React.MutableRefObject<boolean> // Use ref to avoids render all grid cells
   node: Node
 }
 
-export const GridCell = memo(({ i, j, isCurrNode, isMousePressed, node: { partOfSolution, visited, blocked } }: Props) => {
+export const GridCell = memo(({ i, j, isCurrNode, isHoldingClickRef, node: { partOfSolution, visited, blocked } }: Props) => {
   const startCoord = useStore(state => state.startCoord)
   const endCoord = useStore(state => state.endCoord)
   const blockNode = useStore(state => state.blockNode)
@@ -29,7 +29,8 @@ export const GridCell = memo(({ i, j, isCurrNode, isMousePressed, node: { partOf
   }
 
   const handleMouseEnter = () => {
-    if (isMousePressed) { blockNode({ i, j }) }
+    // Just render the current grid with the ref
+    if (isHoldingClickRef.current) { blockNode({ i, j }) }
   }
 
   return <td key={`${i}-${j}`} onClick={() => { blockNode({ i, j }) }} onMouseEnter={handleMouseEnter}
