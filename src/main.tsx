@@ -3,7 +3,9 @@ import {
   createBrowserRouter,
   RouterProvider
 } from 'react-router-dom'
+
 import App from './app.tsx'
+import { GridProvider } from './context'
 import './index.css'
 
 const router = createBrowserRouter([
@@ -15,6 +17,8 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   // <React.StrictMode>
-  <RouterProvider router={router} />
+  <GridProvider>
+    <RouterProvider router={router} />
+  </GridProvider>
   // </React.StrictMode>,
 )
