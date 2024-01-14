@@ -17,7 +17,8 @@ interface StoreAttributes {
 interface StoreMethods {
   setCurrNode: (node: Node) => void
   setGrid: (grid: Grid) => void
-  blockNode: ({ i, j }: Coord) => void
+  lockNode: ({ i, j }: Coord) => void
+  unlockNode: ({ i, j }: Coord) => void
   visitNode: ({ i, j, currNode }: Coord & { currNode: Node }) => void
   drawShortestPath: () => void
   cleanGrid: (initalGrid: Grid) => void
@@ -61,9 +62,14 @@ export const useStore = create(immer<Store>((set, get) => ({
       state.grid[i][j].prevCoord = currNode.coord
     })
   },
-  blockNode: ({ i, j }: Coord) => {
+  lockNode: ({ i, j }: Coord) => {
     set(state => {
-      state.grid[i][j].blocked = !state.grid[i][j].blocked
+      state.grid[i][j].blocked = true
+    })
+  },
+  unlockNode: ({ i, j }: Coord) => {
+    set(state => {
+      state.grid[i][j].blocked = false
     })
   },
   drawShortestPath: () => {
