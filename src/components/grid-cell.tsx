@@ -44,10 +44,11 @@ export const GridCell = memo(({ i, j, isCurrNode, isHoldingClickRef, node: { par
   }
 
   return <td key={`${i}-${j}`} onClick={handleblocking} onMouseEnter={handleMouseEnter}
-    className={`${getBgColor()}  border-blue-950 aspect-square h-[20px] min-w-[20px] text-xs`}>
+    className={'overflow-hidden p-0 h-[20px] min-w-[20px] text-xs'}>
     {(i === startCoord.i && j === startCoord.j) && <img src={UserIcon}/>}
     {(i === endCoord.i && j === endCoord.j) && <img src={LocationIcon}/>}
     {/* {gridItems[i][j].distance} */}
     {/* {i}-{j} */}
+    <div className={`transition-all duration-1000 rounded-full w-full h-full ${getBgColor()} ${blocked || visited ? 'scale-150' : 'scale-0'}`}></div>
   </td>
 })

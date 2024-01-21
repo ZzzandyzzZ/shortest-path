@@ -8,7 +8,7 @@ export const Grid = () => {
   const currNode = useStore(state => state.currNode)
   const isHoldingClickRef = useRef(false)
   return (
-    <div className='overflow-auto border-2 cursor-add'>
+    <div className='overflow-auto border-2 cursor-add bg-white'>
       <table
         onMouseLeave={() => { isHoldingClickRef.current = false }}
         onMouseDown={() => { isHoldingClickRef.current = true }}
